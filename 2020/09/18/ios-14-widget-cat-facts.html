@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css"
+		/>
+		<!-- prettier-ignore -->
+
+		<link rel="stylesheet" href="/assets/css/syntax.css" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="container-md">
+	<div>
+		<div class="navbar">
+			<!-- nav bar -->
+			<div class="navbar-branding">
+				<a href="/">john mcparland</a>
+			</div>
+			<div class="navbar-links">
+				<a class="icon-link" href="https://www.linkedin.com/in/john-mcparland/"
+					><i class="fab fa-linkedin"></i
+				></a>
+
+				<a class="icon-link" href="https://github.com/mcpar-land"
+					><i class="fab fa-github-square"></i
+				></a>
+
+				<a class="icon-link" href="https://www.instagram.com/mcpar_land/"
+					><i class="fab fa-instagram-square"></i
+				></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="hor-line"></div>
+<div class="container-md">
+	<div><div class="post-header">
+	<div class="post-title">iOS 14 Widget - Cat Facts</div>
+	<div class="post-date">September 18, 2020</div>
+</div>
+
+<div class="post"><p><img src="/assets/images/embeds/ios-14-widget-cat-facts/cat_facts.jpeg" alt="a" /></p>
+
+<p>iOS 14’s new homescreen widgets mean only one thing: <em>Ricing.</em></p>
+
+<p>I wrote a tiny script using <a href="https://scriptable.app/">Scriptable</a> and <a href="https://catfact.ninja/">one</a> or <a href="https://cataas.com/">two</a> public APIs to throw together a widget that shows you a cat fact. And a cat.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">fact_req</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Request</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://catfact.ninja/fact?max_length=125</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">json</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fact_req</span><span class="p">.</span><span class="nx">loadJSON</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nx">img_req</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Request</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://cataas.com/cat</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">img_req</span><span class="p">.</span><span class="nx">loadImage</span><span class="p">()</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ListWidget</span><span class="p">()</span>
+<span class="nx">widget</span><span class="p">.</span><span class="nx">backgroundImage</span> <span class="o">=</span> <span class="nx">img</span>
+<span class="nx">widget</span><span class="p">.</span><span class="nx">addText</span><span class="p">(</span><span class="nx">json</span><span class="p">.</span><span class="nx">fact</span><span class="p">)</span>
+
+<span class="nx">Script</span><span class="p">.</span><span class="nx">setWidget</span><span class="p">(</span><span class="nx">widget</span><span class="p">)</span>
+</code></pre></div></div>
+</div>
+</div>
+</div>
+
+	</body>
+</html>

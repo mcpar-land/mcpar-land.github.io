@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css"
+		/>
+		<!-- prettier-ignore -->
+
+		<link rel="stylesheet" href="/assets/css/syntax.css" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="container-md">
+	<div>
+		<div class="navbar">
+			<!-- nav bar -->
+			<div class="navbar-branding">
+				<a href="/">john mcparland</a>
+			</div>
+			<div class="navbar-links">
+				<a class="icon-link" href="https://www.linkedin.com/in/john-mcparland/"
+					><i class="fab fa-linkedin"></i
+				></a>
+
+				<a class="icon-link" href="https://github.com/mcpar-land"
+					><i class="fab fa-github-square"></i
+				></a>
+
+				<a class="icon-link" href="https://www.instagram.com/mcpar_land/"
+					><i class="fab fa-instagram-square"></i
+				></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="hor-line"></div>
+<div class="container-md">
+	<div><div class="post-header">
+	<div class="post-title">Teaching Myself Rust: Parsing Some Math</div>
+	<div class="post-date">September 20, 2020</div>
+</div>
+
+<div class="post"><p>Beating my head against this problem for two days has finally borne fruit: A crate called <a href="https://crates.io/crates/prec"><code class="language-plaintext highlighter-rouge">prec</code></a>.</p>
+
+<h1 id="step-1---the-data-structure">Step 1 - The Data Structure</h1>
+
+<p>Let’s say you want to parse a math equation. It looks like this.</p>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span> <span class="mi">18</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="mi">5</span> <span class="p">)</span> <span class="o">-</span> <span class="mi">14</span> <span class="o">/</span> <span class="mi">7</span>
+</code></pre></div></div>
+
+<p>Given that string, we want to write a program that gives us back a number. Not the most esoteric of problems, there’s entire subsets of algorithms with imposing-sounding names like <a href="https://en.wikipedia.org/wiki/Shunting-yard_algorithm">shunting-yard algorithm</a> and <a href="https://en.wikipedia.org/wiki/Stack-sortable_permutation">stack-sortable permutation</a> and a bunch of other extremely cool math problems that make way more sense to people way smarter than me. As a humble web developer, all knowledge of data structures exited my brain about when I finished Object Oriented Programming 101 and now it’s too full of CSS properties and the differences between <code class="language-plaintext highlighter-rouge">null</code> and <code class="language-plaintext highlighter-rouge">undefined</code> to make room for them again.</p>
+
+<p><em>And yet</em> I needed to create a math equation parser in Rust anyways.</p>
+
+<p>My first strategy was the same as any self-respecting Node dev’s primal instinct: use somebody else’s package. Of course there’s <a href="https://crates.io/crates/meval">plenty</a> <a href="https://crates.io/crates/calculate">of</a> <a href="https://crates.io/crates/mexprp">those</a> out there, but I had a few problems that none of these really handled:</p>
+
+<ul>
+  <li>I already have parsed tokens. Using these would mean re-converting these tokens into a string, then back out into my parsed data structure again. Yuck.</li>
+  <li>I need to include <em>more</em> than just numbers, and <em>more</em> than just the standard <code class="language-plaintext highlighter-rouge">+ - * / ()</code> operators.</li>
+  <li>I’m doing my math in integers, not floats. This means that division will always round down, but I want to supply another operator, <code class="language-plaintext highlighter-rouge">/u</code>, that rounds the result <em>up</em>.</li>
+  <li>…I also need to be able to parse <a href="https://en.wikipedia.org/wiki/Dice_notation">dice notation</a> inline.</li>
+  <li>This means creating a reusable Expression structure that I can roll over and over and over again, because there’s no guarantee the output will be the same every time….</li>
+</ul>
+
+<p>All this is sounding like using an external crate is out of the question. So, time to roll my own.</p>
+
+<h2 id="finding-some-reference-material">Finding Some Reference Material</h2>
+
+<p>So my spec is:</p>
+
+<ul>
+  <li>Given some pre-parsed structure of tokens that represent an equation, return the equation’s result.</li>
+  <li>The actual parsing of the string is handled elsewhere.</li>
+</ul>
+
+<p>The closest thing to this I found was the <a href="https://docs.rs/pest/2.1.3/pest/prec_climber/struct.PrecClimber.html">PrecClimber</a> available in <a href="https://pest.rs/">pest</a>, a seriously cool crate for parsing language based on rules you write. It’s is a built-in utility class that does pretty much exactly what I want, using the <a href="https://en.wikipedia.org/wiki/Operator-precedence_parser#Precedence_climbing_method">operator-precedence parsing algorithm</a>, right?</p>
+
+<p>…But it’s not quite good enough.</p>
+
+<p><code class="language-plaintext highlighter-rouge">PrecClimber</code> takes an array of tokens that look something like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>( 18 / 6 \* 5 ) - 14 / 7
+
+[
+  Operator (paren),
+  Number (18),
+  Operator (divide),
+  Number (6),
+  Operator (multiply),
+  Number (5),
+  Operator (paren),
+  Operator (subtract),
+  Number (14),
+  Number (divide),
+  Number (7)
+]
+</code></pre></div></div>
+
+<p>A flat array of each piece of the equation, one after the other. This makes sense, but can’t we do better?</p>
+
+<p>What if the array somehow ends up looking like this?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>( ( 4 + / 8
+
+[
+  Operator (paren),
+  Operator (paren),
+  Number (4),
+  Operator (add),
+  Operator (divide),
+  Number (8)
+]
+</code></pre></div></div>
+
+<p>That’s technically a valid array, but that’s not at <em>all</em> a valid equation. That means more errors, which means <em>handling</em> more errors, which means more ways your code can fail…</p>
+
+<p>Let’s use a better structure for an equation than that!</p>
+
+<p>A valid expression, without any parentheses in it:</p>
+
+<ol>
+  <li>Always starts with a number.</li>
+  <li>After the first number, is always <em>operator, number, operator, number, operator, number, . . . operator, number</em></li>
+</ol>
+
+<p>A Rust struct that reflects these rules looks like… <a href="https://github.com/mcpar-land/prec/blob/aa1dc0453651021400f30a6d2b4e00501ddf7800/src/lib.rs#L225-L228">this</a>!</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">Expression</span><span class="o">&lt;</span><span class="n">Op</span><span class="p">,</span> <span class="n">To</span><span class="o">&gt;</span> <span class="p">{</span>
+	<span class="k">pub</span> <span class="n">first_token</span><span class="p">:</span> <span class="n">To</span><span class="p">,</span>
+	<span class="k">pub</span> <span class="n">pairs</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="p">(</span><span class="n">Op</span><span class="p">,</span> <span class="n">To</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And including parentheses is as easy as writing your operator / token structures like so:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="n">Operator</span> <span class="p">{</span>
+	<span class="nb">Add</span><span class="p">,</span>
+	<span class="nb">Sub</span><span class="p">,</span>
+	<span class="nb">Mul</span><span class="p">,</span>
+	<span class="nb">Div</span><span class="p">,</span>
+	<span class="n">Exp</span>
+<span class="p">}</span>
+
+<span class="k">struct</span> <span class="n">Token</span> <span class="p">{</span>
+	<span class="nf">Number</span><span class="p">(</span><span class="nb">i64</span><span class="p">),</span>
+	<span class="nf">Parentheses</span><span class="p">(</span><span class="nb">Box</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&lt;</span><span class="n">Operator</span><span class="p">,</span> <span class="n">Token</span><span class="o">&gt;&gt;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Suddenly, we can write <code class="language-plaintext highlighter-rouge">( 18 / 6 * 5 ) - 14 / 7</code> like this:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">use</span> <span class="nn">Operator</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">Token</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="k">let</span> <span class="n">expression</span> <span class="o">=</span> <span class="n">Expression</span> <span class="p">{</span>
+	<span class="n">first_token</span><span class="p">:</span> <span class="nf">Parentheses</span><span class="p">(</span><span class="nn">Box</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">Expression</span> <span class="p">{</span>
+		<span class="n">first_token</span><span class="p">:</span> <span class="nf">Number</span><span class="p">(</span><span class="mi">18</span><span class="p">),</span>
+		<span class="n">pairs</span><span class="p">:</span> <span class="nd">vec!</span><span class="p">[(</span><span class="nb">Div</span><span class="p">,</span> <span class="nf">Number</span><span class="p">(</span><span class="mi">6</span><span class="p">)),</span> <span class="p">(</span><span class="nb">Mul</span><span class="p">,</span> <span class="nf">Number</span><span class="p">(</span><span class="mi">5</span><span class="p">))]</span>
+	<span class="p">},</span>
+	<span class="n">pairs</span><span class="p">:</span> <span class="nd">vec!</span><span class="p">[(</span><span class="nb">Sub</span><span class="p">,</span> <span class="nf">Number</span><span class="p">(</span><span class="mi">14</span><span class="p">)),</span> <span class="p">(</span><span class="nb">Div</span><span class="p">,</span> <span class="nf">Number</span><span class="p">(</span><span class="mi">7</span><span class="p">))]</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>With a struct that reflects the rules of the problem you’re trying to solve, you can make it <em>impossible</em> to write invalid code. I never have to worry about handling errors related to the shape of the structure after the actual string-to-Expression parsing step.</p>
+
+<p>We haven’t <em>done</em> anything with our cool struct yet, but that’s the next step:</p>
+
+<h1 id="step-2---the-algorithm">Step 2 - The Algorithm</h1>
+
+<p>Just one problem: <a href="https://en.wikipedia.org/wiki/Operator-precedence_parser#Precedence_climbing_method">Every</a> <a href="https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing">example</a> of an operator-precedence climber I found online works off of a possibly-incorrect array, as shown further above. That means, yet again, rolling my own.</p>
+
+<p>The next step happened during a two-day fugue state of random attempts at translating those examples I found into this new struct I’ve made, so I couldn’t tell you exactly how I did it. But I did do it, and <a href="https://github.com/mcpar-land/prec/blob/aa1dc0453651021400f30a6d2b4e00501ddf7800/src/lib.rs#L129-L179">the code’s there</a>, so I must have written it?! It appears to be very heavily based on <a href="https://docs.rs/pest/2.1.3/src/pest/prec_climber.rs.html#172">the code of PrecClimber</a>.</p>
+
+<p><img src="/assets/images/embeds/teaching-myself-rust-parsing-some-math/Untitled.png" width="350" /></p>
+
+<p>I was the latter during this stage. No memory of this time exists.</p>
+
+<h1 id="end-result-generic-operator-precedence-parser">End Result: Generic Operator-Precedence Parser</h1>
+
+<p>The final result: <a href="https://crates.io/crates/prec"><code class="language-plaintext highlighter-rouge">prec</code></a>! A crate for extremely generic operator-precedence parsing. You supply everything around the actual algorithm itself:</p>
+
+<ul>
+  <li>A structure that represents a token
+    <ul>
+      <li>An implementation of <code class="language-plaintext highlighter-rouge">Into</code> that turns the token into some final value, likely <code class="language-plaintext highlighter-rouge">f64</code> or <code class="language-plaintext highlighter-rouge">i64</code>, but it could be anything!</li>
+    </ul>
+  </li>
+  <li>A structure that represents an operator</li>
+  <li>A function that determines what operators actually do</li>
+  <li>A set of rules to determine <em>which operators take precedence over others</em> (hence the name, operator precedence!)</li>
+</ul>
+
+<p>Your end result might look something like this:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">handler</span><span class="p">(</span><span class="n">lhs</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="n">Operator</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="nb">f64</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">match</span> <span class="n">op</span> <span class="p">{</span>
+		<span class="nn">Operator</span><span class="p">::</span><span class="nb">Add</span> <span class="k">=&gt;</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">,</span>
+		<span class="nn">Operator</span><span class="p">::</span><span class="nb">Sub</span> <span class="k">=&gt;</span> <span class="n">lhs</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">,</span>
+		<span class="nn">Operator</span><span class="p">::</span><span class="nb">Mul</span> <span class="k">=&gt;</span> <span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">,</span>
+		<span class="nn">Operator</span><span class="p">::</span><span class="nb">Div</span> <span class="k">=&gt;</span> <span class="n">lhs</span> <span class="o">/</span> <span class="n">rhs</span><span class="p">,</span>
+		<span class="nn">Operator</span><span class="p">::</span><span class="n">Exp</span> <span class="k">=&gt;</span> <span class="n">lhs</span><span class="nf">.powf</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="n">climber</span> <span class="o">=</span> <span class="nn">Climber</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+	<span class="nd">vec!</span><span class="p">[</span>
+		<span class="nn">Rule</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Operator</span><span class="p">::</span><span class="nb">Add</span><span class="p">,</span> <span class="nn">Assoc</span><span class="p">::</span><span class="nb">Left</span><span class="p">)</span> <span class="p">|</span> <span class="nn">Rule</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Operator</span><span class="p">::</span><span class="nb">Sub</span><span class="p">,</span> <span class="nn">Assoc</span><span class="p">::</span><span class="nb">Right</span><span class="p">),</span>
+		<span class="nn">Rule</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Operator</span><span class="p">::</span><span class="nb">Mul</span><span class="p">,</span> <span class="nn">Assoc</span><span class="p">::</span><span class="nb">Left</span><span class="p">)</span> <span class="p">|</span> <span class="nn">Rule</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Operator</span><span class="p">::</span><span class="nb">Div</span><span class="p">,</span> <span class="nn">Assoc</span><span class="p">::</span><span class="nb">Right</span><span class="p">),</span>
+		<span class="nn">Rule</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Operator</span><span class="p">::</span><span class="n">Exp</span><span class="p">,</span> <span class="nn">Assoc</span><span class="p">::</span><span class="nb">Right</span><span class="p">)</span>
+	<span class="p">],</span>
+	<span class="n">handler</span>
+<span class="p">);</span>
+
+<span class="c">// 2 + 2 * 3</span>
+<span class="c">// 2 + 6</span>
+<span class="c">// 8</span>
+<span class="k">let</span> <span class="n">expression</span> <span class="o">=</span> <span class="nn">Expression</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+	<span class="mf">2.0f64</span><span class="p">,</span>
+	<span class="nd">vec!</span><span class="p">[</span>
+		<span class="p">(</span><span class="nn">Operator</span><span class="p">::</span><span class="nb">Add</span><span class="p">,</span> <span class="mf">2.0f64</span><span class="p">),</span>
+		<span class="p">(</span><span class="nn">Operator</span><span class="p">::</span><span class="nb">Mul</span><span class="p">,</span> <span class="mf">3.0f64</span><span class="p">)</span>
+	<span class="p">]</span>
+<span class="p">);</span>
+
+<span class="nd">assert_eq!</span><span class="p">(</span><span class="n">climber</span><span class="nf">.process</span><span class="p">(</span><span class="o">&amp;</span><span class="n">expression</span><span class="p">),</span> <span class="mf">8.0f64</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>You can use standard ol’ operators like add, multiply, divide, etc. <em>or</em> you can leverage what makes the crate so cool, and roll some operators of your own. You can conceivably use this to write some sort of operator-precedence string concatenation thing, or add in stuff like trigonometry. The <a href="https://github.com/mcpar-land/prec/blob/master/examples/int_math.rs">included example</a> already extends it to use parentheses, so the sky’s really the limit.</p>
+
+<p>Check the documentation out, write your own parser for something!</p>
+
+<p><a href="https://docs.rs/prec/0.1.0/prec/">prec - Rust</a></p>
+
+<p><a href="https://github.com/mcpar-land/prec">mcpar-land/prec</a></p>
+
+<p><a href="https://crates.io/crates/prec">crates.io: Rust Package Registry</a></p>
+</div>
+</div>
+</div>
+
+	</body>
+</html>

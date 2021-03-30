@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css"
+		/>
+		<!-- prettier-ignore -->
+
+		<link rel="stylesheet" href="/assets/css/syntax.css" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="container-md">
+	<div>
+		<div class="navbar">
+			<!-- nav bar -->
+			<div class="navbar-branding">
+				<a href="/">john mcparland</a>
+			</div>
+			<div class="navbar-links">
+				<a class="icon-link" href="https://www.linkedin.com/in/john-mcparland/"
+					><i class="fab fa-linkedin"></i
+				></a>
+
+				<a class="icon-link" href="https://github.com/mcpar-land"
+					><i class="fab fa-github-square"></i
+				></a>
+
+				<a class="icon-link" href="https://www.instagram.com/mcpar_land/"
+					><i class="fab fa-instagram-square"></i
+				></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="hor-line"></div>
+<div class="container-md">
+	<div><div class="post-header">
+	<div class="post-title">Teaching Myself Rust: Baduk & Bevy</div>
+	<div class="post-date">September 07, 2020</div>
+</div>
+
+<div class="post"><p><a href="https://github.com/mcpar-land/bevy_baduk">mcpar-land/bevy_baduk</a></p>
+
+<p>Teaching myself Rust over the past year has been the toughest, and most rewarding programming challenge I’ve ever worked through. I had to know why this language I’d never heard of was <a href="https://insights.stackoverflow.com/survey/2020#technology-most-loved-dreaded-and-wanted-languages-loved">the most loved language on Stack Overflow for five years running</a>. Like any prospective Rust programmer, I bonked my head against the borrow checker over and over - but a good bonking, the kind that hammers out a new, internalized way of thinking about a problem, bit by bit. By necessity, I learned about the internal structure of computer memory, sizes of data, multi-threading logic, and plenty more that Rust has, by virtue of its philosophy alone, converted into second nature for me (or moved towards it, at least!)</p>
+
+<p>Rust is great because it’s standing on nearly a <a href="https://simple.wikipedia.org/wiki/C_(programming_language)#:~:text=C%20was%20developed%20in%20the,step%2Dby%2Dstep%20instructions.">half century</a> worth of giants’ shoulders. The community of programmers have more or less figured out the tools that are so common that Rust opted to have them built-in. Unit testing. Linting. Automatic formatting. A package manager.</p>
+
+<p>Coming over from Node, not having to wrangle a huge <code class="language-plaintext highlighter-rouge">node_modules</code> folder for each and every project is wonderful. But at the same time, having Cargo as a truly first-class citizen (not having to fuss around with <code class="language-plaintext highlighter-rouge">GOPATH</code>s or what have you) feels so familiar, I knew how to use it right away.</p>
+
+<p>There was never one single <em>click</em> moment where everything made sense all at once, but lots of little clicks.</p>
+
+<ul>
+  <li>“Oh, that’s how borrow scopes work!”</li>
+  <li>“Oh, that’s what <code class="language-plaintext highlighter-rouge">Option</code> and <code class="language-plaintext highlighter-rouge">Result</code> are!”</li>
+  <li>“Oh, that’s how enums are different!”</li>
+  <li>“Oh, that’s the point of <code class="language-plaintext highlighter-rouge">Rc</code> and <code class="language-plaintext highlighter-rouge">Arc</code>!”</li>
+  <li>“Oh, that’s what macros do!”</li>
+</ul>
+
+<p>Every one a little more illuminating than the last.</p>
+
+<p>I’ve assembled a tiny <a href="https://github.com/mcpar-land/fallbaq">project</a> or <a href="https://github.com/mcpar-land/rusx">two</a> or <a href="https://github.com/mcpar-land/ultra-tournament">three</a>, learning piles of new concepts every time.</p>
+
+<h1 id="the-rust-game-engine-of-the-future-bevy">The Rust Game Engine of the Future: Bevy!</h1>
+
+<p>My latest and greatest, though, uses my new favorite game engine, <a href="https://bevyengine.org/">Bevy</a>, so fresh that it came out <a href="https://bevyengine.org/news/introducing-bevy/">last month</a> and oh boy, it looks like it could go far. The design philosophy and ergonomics make it stand right out in a world of Rust engines that, while type-safe, can come with a looot of boilerplate. Seriously, the way you write the Bevy ECS feels like black magic. Huge props to <a href="https://twitter.com/cart_cart">@cart</a> for putting his heart and soul into this project. Hopefully I’ll be able to contribute to it someday.</p>
+
+<p>But in the meantime, I’m familiarizing myself with it by creating helpful projects like a <a href="https://crates.io/crates/bevy_fly_camera">general-use 3D flying camera</a> that people are already putting into their own learning projects! But my latest (possibly greatest?) one is a <em>fully-functioning game of Go.</em></p>
+
+<h2 id="step-1---writing-go-in-rust">Step 1 - Writing Go in Rust</h2>
+
+<p>I wanted to do this project in the most “correct” way I could. This means <em>keeping game logic and display logic separate</em>. I wanted to aim for a React-style display loop, where I keep my game logic somewhere in the back, then just re-render the entire board every time the game changes. So that’s what I did! Before I even touched Bevy, I spent a day making a robust system that reflected Go and its rules, along with plenty of unit tests. I wrote a quick-and-pretty console display for a board state.</p>
+
+<p><img src="https://i.imgur.com/4u7LwPO.png" alt="https://i.imgur.com/4u7LwPO.png" /></p>
+
+<p>This REALLY came in handy for looking at the results of unit tests. I had (almost) every rule of Go’s capturing system testing and working before I got to the fun part of writing the GUI.</p>
+
+<p>Robust game logic for Go means:</p>
+
+<ul>
+  <li>Being able to return the array of stones in the ‘shape’ for any arbitrary position.</li>
+  <li>Determining if a move would result in a self-capture (illegal)</li>
+  <li>Determining if a move would resulting a self-capture, <em>but</em> would capture an enemy group of stones first (legal)</li>
+  <li>Determining if a move would cause the board to return to a previous board state (Ko, illegal)</li>
+</ul>
+
+<p>I also used separate <code class="language-plaintext highlighter-rouge">Board</code> and <code class="language-plaintext highlighter-rouge">Game</code> structs. The former just stores a static board state and can say whether or not a move is valid. The latter encapsulates a board, and also stores a list of moves. It can construct a board given an array of moves, meaning at some point I could implement a move history slider!</p>
+
+<h2 id="step-2---displaying-go-in-bevy">Step 2 - Displaying Go in Bevy</h2>
+
+<p>For the images, I used the board background from the ubiquitous Go wiki <a href="https://senseis.xmp.net/?WhatIsGo">Sensei’s Library</a>. They already have a board templating system set up that’s pixel perfect, and making my own board pixel by pixel seemed like manual labor. I did have to make my own graphics for the stones, but that was just making a black and white circle in Aseprite.</p>
+
+<p>Then, it was just a matter of using Bevy’s terrific ECS. The basic setup is:</p>
+
+<ul>
+  <li>A mutable <code class="language-plaintext highlighter-rouge">Resource</code> containing a <code class="language-plaintext highlighter-rouge">Game</code>, which handles all logic and game state.</li>
+  <li>A UI <code class="language-plaintext highlighter-rouge">NodeComponents</code> for displaying the board.</li>
+  <li>A grid of 19x19 invisible <code class="language-plaintext highlighter-rouge">ButtonComponents</code> bundles, with a <code class="language-plaintext highlighter-rouge">(u8, u8)</code> component tacked on that stores its position on the grid.</li>
+  <li>Another <code class="language-plaintext highlighter-rouge">NodeComponents</code> bundle, used for displaying the semi-transparent “cursor” stone. It moves to the position of any button the mouse hovers over, and changes its material based on the current turn, or if the position it’s overing over is a valid move or not.</li>
+  <li>A bunch of <code class="language-plaintext highlighter-rouge">NodeComponents</code> bundles with a dummy <code class="language-plaintext highlighter-rouge">UiPiece</code> struct as a component, used to display all the stones on the board. Every time a move is successfully played by the <code class="language-plaintext highlighter-rouge">Game</code>, all of these are destroyed, then re-added based on the game’s current state. This way, I don’t have to worry about deleting the exact stones that are removed by any given play or capture.</li>
+</ul>
+
+<p>At most, this means a total of $19\times19=361$ entities, in a non-real-time game, which Bevy is more than capable of handling.</p>
+
+<p>The end result? A playable Go board that <em>only</em> allows for valid moves, with instant visual feedback as to whether any given square is valid or not.</p>
+
+<video controls="">
+<source src="/assets/images/embeds/teaching-myself-rust-baduk-and-bevy/go_in_bevy.mp4" type="video/mp4" />
+</video>
+
+<p>Could be prettier, but the feedback feels fantastic. I might add sounds at some point to really get the feel down.</p>
+
+<h1 id="next-steps">Next Steps</h1>
+
+<p>My focus is fickle, so maybe I’ll never return to this project. Or maybe I will! If I do, I’m thinking of the following improvements:</p>
+
+<ul>
+  <li>Making Ko tracking more robust. I suspect it’s not 100% correct, and it’s also stored in the <code class="language-plaintext highlighter-rouge">Board</code> struct, which should be time-agnostic. Move tracking Ko to the <code class="language-plaintext highlighter-rouge">Game</code> struct, instead.</li>
+  <li>Adding some auditory feedback for placing stones.</li>
+  <li>Adding a UI for starting with a handicap. I have handicap as a functionality in the game logic already, I just need to make it a selection at the game start.</li>
+  <li>Adding a game history slider at the bottom of the screen.</li>
+  <li>Possibly serializing/deserializing from the common Go game file formats available, or writing one of my own.</li>
+</ul>
+
+<p>Feel free to check out the source code on my repo! Running the game is as simple as cloning and running <code class="language-plaintext highlighter-rouge">cargo run</code>. Make sure you update to Rust 1.46.</p>
+
+<p><a href="https://github.com/mcpar-land/bevy_baduk/tree/master">mcpar-land/bevy_baduk</a></p>
+
+<p>You should also <em>definitely</em> check out Bevy. It’s a super-duper new, open source game engine. I suspect it’ll be a competitor to Godot within the year. I cannot wait until it’s complete enough to make a game with, because that’s what I’ll be doing!</p>
+
+<p><a href="https://bevyengine.org/">Bevy - A data-driven game engine built in Rust</a></p>
+</div>
+</div>
+</div>
+
+	</body>
+</html>
