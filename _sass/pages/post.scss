@@ -1,1 +1,99 @@
 @import '../base';
+
+.post-header {
+	margin-top: $spacing * 4;
+
+	.post-title {
+		font-family: $font-family-code;
+		font-weight: bold;
+		font-size: 24pt;
+	}
+	.post-date {
+		font-family: $font-family-code;
+		font-style: italic;
+		color: $font-color-light;
+		font-weight: lighter;
+		font-size: 10pt;
+		margin-top: $spacing;
+	}
+}
+
+.post {
+	p,
+	ul,
+	ol,
+	li {
+		line-height: 1.4;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: $font-family-code;
+		font-weight: 500;
+	}
+
+	h1 {
+		font-size: 20pt;
+	}
+
+	h2 {
+		font-size: 18pt;
+	}
+
+	h3 {
+		font-size: 16pt;
+	}
+
+	h4 {
+		font-size: 14pt;
+	}
+
+	h6 {
+		font-size: 12pt;
+	}
+
+	ul {
+		list-style: disc;
+	}
+
+	a {
+		text-decoration: none;
+		font-weight: 500;
+	}
+
+	p {
+		text-indent: 1em;
+		margin: 0.25em 0;
+	}
+}
+
+code {
+	background: rgb(252, 252, 252);
+	font-family: $font-family-code;
+	border-radius: $border-radius;
+	tab-size: 2;
+}
+
+.highlight code {
+	display: block;
+	padding: $spacing;
+	overflow-x: auto;
+}
+
+::-webkit-scrollbar {
+	width: $border-radius * 2;
+	height: $border-radius * 2;
+}
+::-webkit-scrollbar-thumb {
+	background: #e6e6e6;
+	border-radius: $border-radius;
+}
+
+::-webkit-scrollbar-track {
+	background: none;
+	border-radius: $border-radius;
+}

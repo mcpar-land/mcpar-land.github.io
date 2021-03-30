@@ -15,12 +15,40 @@
 .hor-line {
 	width: 100%;
 	height: 1px;
-	background: black;
+	background: $font-color;
+}
+
+.icon-link {
+	color: $font-color;
+}
+
+.top-cols {
+	align-items: flex-end;
+	padding: $spacing * 4 0;
+	@include breakpoint('sm') {
+		margin: 8px;
+	}
+}
+
+.col-icons {
+	width: auto;
+	flex-grow: 0 !important;
+	font-size: 4em;
+	display: flex;
+	flex-direction: column;
+	@include breakpoint('sm') {
+		// width: 100%;
+		font-size: 2em;
+		justify-content: flex-end;
+		& > div:not(:last-child) {
+			margin-right: $spacing;
+		}
+	}
 }
 
 #bigname {
 	font-size: 45pt;
-	margin: 32px 0;
+	font-family: $font-family-code;
 	@include breakpoint('sm') {
 		font-size: 24pt;
 	}

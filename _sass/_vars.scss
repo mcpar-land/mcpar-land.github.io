@@ -1,16 +1,20 @@
 $spacing: 8px;
-$font-color: rgb(24, 24, 24);
 
-$link-color: rgb(48, 48, 143);
+$font-family: 'Heebo', sans-serif;
+$font-family-code: 'Cascadia Code', 'Courier New', Courier, monospace;
+$font-color: rgb(58, 58, 58);
+$font-color-light: rgb(177, 177, 177);
+$link-color: rgb(101, 101, 211);
 
+$border-radius: 4px;
 // ============================================================================
 
 $breakpoints: (
-	'xs': 0px,
-	'sm': 600px,
-	'md': 960px,
-	'lg': 1280px,
-	'xl': 1920px,
+	'xs': 150px,
+	'sm': 350px,
+	'md': 650px,
+	'lg': 950px,
+	'xl': 1280px,
 );
 
 $cols: (

@@ -2,12 +2,9 @@
 layout: post
 title: 'Teaching Myself Rust: Parsing Some Math'
 date: 2020-09-20
-categories: programming rust
 ---
 
-Beating my head against this problem for two days has finally borne fruit: A crate called `prec`.
-
-[crates.io: Rust Package Registry](https://crates.io/crates/prec)
+Beating my head against this problem for two days has finally borne fruit: A crate called [`prec`](https://crates.io/crates/prec).
 
 # Step 1 - The Data Structure
 
@@ -25,9 +22,9 @@ My first strategy was the same as any self-respecting Node dev's primal instinct
 
 - I already have parsed tokens. Using these would mean re-converting these tokens into a string, then back out into my parsed data structure again. Yuck.
 - I need to include _more_ than just numbers, and _more_ than just the standard `+ - * / ()` operators.
-  - I'm doing my math in integers, not floats. This means that division will always round down, but I want to supply another operator, `/u`, that rounds the result _up_.
-  - ...I also need to be able to parse [dice notation](https://en.wikipedia.org/wiki/Dice_notation) inline.
-    - This means creating a reusable Expression structure that I can roll over and over and over again, because there's no guarantee the output will be the same every time....
+- I'm doing my math in integers, not floats. This means that division will always round down, but I want to supply another operator, `/u`, that rounds the result _up_.
+- ...I also need to be able to parse [dice notation](https://en.wikipedia.org/wiki/Dice_notation) inline.
+- This means creating a reusable Expression structure that I can roll over and over and over again, because there's no guarantee the output will be the same every time....
 
 All this is sounding like using an external crate is out of the question. So, time to roll my own.
 
@@ -38,27 +35,27 @@ So my spec is:
 - Given some pre-parsed structure of tokens that represent an equation, return the equation's result.
 - The actual parsing of the string is handled elsewhere.
 
-The closest thing to this I found was the `[PrecClimber](https://docs.rs/pest/2.1.3/pest/prec_climber/struct.PrecClimber.html)` available in [pest](https://pest.rs/), a seriously cool crate for parsing language based on rules you write. It's is a built-in utility class that does pretty much exactly what I want, using the [operator-precedence parsing algorithm](https://en.wikipedia.org/wiki/Operator-precedence_parser#Precedence_climbing_method), right?
+The closest thing to this I found was the [PrecClimber](https://docs.rs/pest/2.1.3/pest/prec_climber/struct.PrecClimber.html) available in [pest](https://pest.rs/), a seriously cool crate for parsing language based on rules you write. It's is a built-in utility class that does pretty much exactly what I want, using the [operator-precedence parsing algorithm](https://en.wikipedia.org/wiki/Operator-precedence_parser#Precedence_climbing_method), right?
 
 ...But it's not quite good enough.
 
 `PrecClimber` takes an array of tokens that look something like this:
 
-```markdown
+```
 ( 18 / 6 \* 5 ) - 14 / 7
 
 [
-Operator (paren),
-Number (18),
-Operator (divide),
-Number (6),
-Operator (multiply),
-Number (5),
-Operator (paren),
-Operator (subtract),
-Number (14),
-Number (divide),
-Number (7)
+  Operator (paren),
+  Number (18),
+  Operator (divide),
+  Number (6),
+  Operator (multiply),
+  Number (5),
+  Operator (paren),
+  Operator (subtract),
+  Number (14),
+  Number (divide),
+  Number (7)
 ]
 ```
 
@@ -66,16 +63,16 @@ A flat array of each piece of the equation, one after the other. This makes sens
 
 What if the array somehow ends up looking like this?
 
-```markdown
+```
 ( ( 4 + / 8
 
 [
-Operator (paren),
-Operator (paren),
-Number (4),
-Operator (add),
-Operator (divide),
-Number (8)
+  Operator (paren),
+  Operator (paren),
+  Number (4),
+  Operator (add),
+  Operator (divide),
+  Number (8)
 ]
 ```
 
@@ -139,13 +136,13 @@ Just one problem: [Every](https://en.wikipedia.org/wiki/Operator-precedence_pars
 
 The next step happened during a two-day fugue state of random attempts at translating those examples I found into this new struct I've made, so I couldn't tell you exactly how I did it. But I did do it, and [the code's there](https://github.com/mcpar-land/prec/blob/aa1dc0453651021400f30a6d2b4e00501ddf7800/src/lib.rs#L129-L179), so I must have written it?! It appears to be very heavily based on [the code of PrecClimber](https://docs.rs/pest/2.1.3/src/pest/prec_climber.rs.html#172).
 
-![Teaching%20Myself%20Rust%20Parsing%20Some%20Math%202dbcd875e9e04630ade0d3a7d1f1927e/Untitled.png](Teaching%20Myself%20Rust%20Parsing%20Some%20Math%202dbcd875e9e04630ade0d3a7d1f1927e/Untitled.png)
+<!-- ![Teaching%20Myself%20Rust%20Parsing%20Some%20Math%202dbcd875e9e04630ade0d3a7d1f1927e/Untitled.png](Teaching%20Myself%20Rust%20Parsing%20Some%20Math%202dbcd875e9e04630ade0d3a7d1f1927e/Untitled.png) -->
 
 I was the latter during this stage. No memory of this time exists.
 
 # End Result: Generic Operator-Precedence Parser
 
-The final result: `[prec](https://crates.io/crates/prec)`! A crate for extremely generic operator-precedence parsing. You supply everything around the actual algorithm itself:
+The final result: [`prec`](https://crates.io/crates/prec)! A crate for extremely generic operator-precedence parsing. You supply everything around the actual algorithm itself:
 
 - A structure that represents a token
   - An implementation of `Into` that turns the token into some final value, likely `f64` or `i64`, but it could be anything!
@@ -195,12 +192,6 @@ Check the documentation out, write your own parser for something!
 
 [prec - Rust](https://docs.rs/prec/0.1.0/prec/)
 
-Docs.rs
-
 [mcpar-land/prec](https://github.com/mcpar-land/prec)
 
-GitHub
-
 [crates.io: Rust Package Registry](https://crates.io/crates/prec)
-
-Crates.io

@@ -1,0 +1,38 @@
+@import '../base';
+
+.navbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 100px;
+	@include breakpoint('sm') {
+		height: 50px;
+	}
+
+	.navbar-branding a {
+		font-family: $font-family-code;
+		color: $font-color;
+		text-decoration: none;
+		font-size: 24pt;
+		@include breakpoint('sm') {
+			font-size: 16pt;
+		}
+		@include breakpoint('xs') {
+			font-size: 12pt;
+		}
+	}
+
+	.navbar-links {
+		font-size: 2em;
+		display: flex;
+		@include breakpoint('sm') {
+			font-size: 1.5em;
+		}
+
+		& a {
+			&:not(:last-child) {
+				margin-right: $spacing;
+			}
+		}
+	}
+}

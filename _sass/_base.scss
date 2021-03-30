@@ -7,7 +7,7 @@ body {
 }
 
 body {
-	font-family: 'Cascadia Mono', 'Courier New', Courier, monospace;
+	font-family: $font-family;
 	color: $font-color;
 }
 
@@ -26,7 +26,8 @@ a {
 		& > div {
 			width: 100%;
 			max-width: $width;
-			margin: 0px $spacing;
+			box-sizing: border-box;
+			padding: 0 $spacing * 2;
 		}
 	}
 }
@@ -55,14 +56,6 @@ a {
 	}
 }
 
-// @each $name, $width in $breakpoints {
-// 	@mixin breakpoint-#{$name} {
-// 		@media (min-width: $breakpoint-width) {
-// 			@content;
-// 		}
-// 	}
-// }
-// breakpoint mixin
 @mixin breakpoint($width) {
 	@media (max-width: map-get($breakpoints, $width)) {
 		@content();
@@ -74,7 +67,3 @@ a {
 		@content();
 	}
 }
-
-// ===========================================================================
-
-// horizontal line
