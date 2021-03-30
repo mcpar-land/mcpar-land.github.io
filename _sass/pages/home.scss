@@ -50,6 +50,7 @@
 #bigname {
 	font-size: 45pt;
 	font-family: $font-family-code;
+	user-select: none;
 	@include breakpoint('sm') {
 		font-size: 24pt;
 	}
