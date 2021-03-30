@@ -60,12 +60,12 @@ a {
 
 @mixin breakpoint($width) {
 	@media (max-width: map-get($breakpoints, $width)) {
-		@content();
+		@content;
 	}
 }
 
 @mixin breakpoint-min($width) {
 	@media (min-width: map-get($breakpoints, $width)) {
-		@content();
+		@content;
 	}
 }

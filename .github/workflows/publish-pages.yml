@@ -1,17 +1,17 @@
-name: Build and deploy Jekyll site to GitHub Pages
+# name: Build and deploy Jekyll site to GitHub Pages
 
-on:
-  push:
-    branches:
-      - master
+# on:
+#   push:
+#     branches:
+#       - master
 
-jobs:
-  github-pages:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.1.5
-      - uses: helaili/jekyll-action@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          target_branch: 'gh-pages'
+# jobs:
+#   github-pages:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: actions/setup-node@v2.1.5
+#       - uses: helaili/jekyll-action@v2
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           target_branch: 'gh-pages'
