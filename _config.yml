@@ -38,6 +38,11 @@ sass:
   sass_dir: _sass
   style: compressed
 
+markdown: kramdown
+
+kramdown:
+  math_engine: katex
+
 defaults:
   - scope:
       path: "assets/images"

@@ -1,6 +1,7 @@
 @import '../base';
 
 .home-centerer {
+	font-family: $font-family-code;
 	& > div {
 		padding: 32px 0px;
 	}
@@ -51,5 +52,30 @@
 	font-family: $font-family-code;
 	@include breakpoint('sm') {
 		font-size: 24pt;
+	}
+}
+
+.posts-list {
+	width: 100%;
+	.posts-list-item {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		line-height: 1.25;
+		@include breakpoint('md') {
+			flex-direction: column;
+			margin-bottom: $spacing;
+		}
+	}
+
+	.posts-list-date {
+		font-style: italic;
+		color: $font-color-light;
+		font-weight: lighter;
+		font-size: 10pt;
+		text-align: right;
+		@include breakpoint('md') {
+			text-align: left;
+		}
 	}
 }

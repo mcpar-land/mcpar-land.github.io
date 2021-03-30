@@ -59,7 +59,7 @@ Then, it was just a matter of using Bevy's terrific ECS. The basic setup is:
 - Another `NodeComponents` bundle, used for displaying the semi-transparent "cursor" stone. It moves to the position of any button the mouse hovers over, and changes its material based on the current turn, or if the position it's overing over is a valid move or not.
 - A bunch of `NodeComponents` bundles with a dummy `UiPiece` struct as a component, used to display all the stones on the board. Every time a move is successfully played by the `Game`, all of these are destroyed, then re-added based on the game's current state. This way, I don't have to worry about deleting the exact stones that are removed by any given play or capture.
 
-At most, this means a total of $19\times19=361$ entities, in a non-real-time game, which Bevy is more than capable of handling.
+At most, this means a total of $$19\times19=361$$ entities, in a non-real-time game, which Bevy is more than capable of handling.
 
 The end result? A playable Go board that _only_ allows for valid moves, with instant visual feedback as to whether any given square is valid or not.
 
