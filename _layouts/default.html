@@ -1,3 +1,10 @@
+<!-- prettier-ignore -->
+{% if page.title %}
+{% assign page_title = page.title | append: " - John McParland" %}
+{% else %}
+{% assign page_title = "John McParland" %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -35,12 +42,13 @@
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.css"
 		/>
-		<!-- prettier-ignore -->
 
 		<link rel="stylesheet" href="/assets/css/syntax.css" />
 		<link rel="stylesheet" href="/assets/css/main.css" />
+		<title>{{page_title}}</title>
 
-		<title>Document</title>
+		<meta property="og:title" content="{{page_title}}" />
+		<link rel="icon" type="image/png" href="/assets/images/favicon.png" />
 	</head>
 	<body>
 		{{content}}
