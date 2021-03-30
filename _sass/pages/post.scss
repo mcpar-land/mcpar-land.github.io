@@ -69,6 +69,13 @@
 		text-indent: 1em;
 		margin: 0.25em 0;
 	}
+
+	img {
+		margin: $spacing auto;
+		text-align: center;
+		display: block;
+		max-width: 100%;
+	}
 }
 
 code {

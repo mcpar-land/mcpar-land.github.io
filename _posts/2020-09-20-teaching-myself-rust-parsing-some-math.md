@@ -136,7 +136,7 @@ Just one problem: [Every](https://en.wikipedia.org/wiki/Operator-precedence_pars
 
 The next step happened during a two-day fugue state of random attempts at translating those examples I found into this new struct I've made, so I couldn't tell you exactly how I did it. But I did do it, and [the code's there](https://github.com/mcpar-land/prec/blob/aa1dc0453651021400f30a6d2b4e00501ddf7800/src/lib.rs#L129-L179), so I must have written it?! It appears to be very heavily based on [the code of PrecClimber](https://docs.rs/pest/2.1.3/src/pest/prec_climber.rs.html#172).
 
-<!-- ![Teaching%20Myself%20Rust%20Parsing%20Some%20Math%202dbcd875e9e04630ade0d3a7d1f1927e/Untitled.png](Teaching%20Myself%20Rust%20Parsing%20Some%20Math%202dbcd875e9e04630ade0d3a7d1f1927e/Untitled.png) -->
+<img src="/assets/images/embeds/teaching-myself-rust-parsing-some-math/Untitled.png" width="350" />
 
 I was the latter during this stage. No memory of this time exists.
 
