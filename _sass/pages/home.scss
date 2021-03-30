@@ -1,0 +1,27 @@
+@import '../base';
+
+.home-centerer {
+	& > div {
+		padding: 32px 0px;
+	}
+	@include breakpoint-min('sm') {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+}
+
+.hor-line {
+	width: 100%;
+	height: 1px;
+	background: black;
+}
+
+#bigname {
+	font-size: 45pt;
+	margin: 32px 0;
+	@include breakpoint('sm') {
+		font-size: 24pt;
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"emmet.includeLanguages":{
+    "jekyll": "html",
+    "scss": "css"
+  },
+	"scss.validate": false,
+  "[markdown]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80
+  }
+}

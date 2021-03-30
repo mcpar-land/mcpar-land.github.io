@@ -1,0 +1,80 @@
+@import './fonts';
+@import './vars';
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	font-family: 'Cascadia Mono', 'Courier New', Courier, monospace;
+	color: $font-color;
+}
+
+a {
+	color: $link-color;
+}
+
+// container
+@each $name, $width in $breakpoints {
+	.container-#{$name} {
+		width: 100%;
+
+		display: flex;
+		justify-content: center;
+
+		& > div {
+			width: 100%;
+			max-width: $width;
+			margin: 0px $spacing;
+		}
+	}
+}
+
+// cols
+.cols {
+	display: flex;
+
+	& > .col {
+		flex-grow: 1;
+
+		&:not(:first-child) {
+			margin-left: $spacing;
+		}
+	}
+
+	@each $name, $width in $cols {
+		& > .col-#{$name} {
+			flex-grow: 1;
+			width: $width;
+
+			&:not(:first-child) {
+				margin-left: $spacing;
+			}
+		}
+	}
+}
+
+// @each $name, $width in $breakpoints {
+// 	@mixin breakpoint-#{$name} {
+// 		@media (min-width: $breakpoint-width) {
+// 			@content;
+// 		}
+// 	}
+// }
+// breakpoint mixin
+@mixin breakpoint($width) {
+	@media (max-width: map-get($breakpoints, $width)) {
+		@content();
+	}
+}
+
+@mixin breakpoint-min($width) {
+	@media (min-width: map-get($breakpoints, $width)) {
+		@content();
+	}
+}
+
+// ===========================================================================
+
+// horizontal line
