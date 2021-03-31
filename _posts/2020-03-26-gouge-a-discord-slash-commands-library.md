@@ -70,7 +70,7 @@ You ordered 34 Plain bagels.
 
 Slick!
 
-But probably the most ergonomic feature is that a command's handler arguments are _typed._ Take this example command, with three arguments of types _[User_, _Channel,_ and _Role_](https://discord.com/developers/docs/interactions/slash-commands#applicationcommandoptiontype).
+But probably the most ergonomic feature is that a command's handler arguments are _typed._ Take this example command, with three arguments of types [_User_, _Channel,_ and _Role_](https://discord.com/developers/docs/interactions/slash-commands#applicationcommandoptiontype).
 
 ![a](\assets\images\embeds\gouge-a-discord-slash-commands-library\Untitled%202.png)
 

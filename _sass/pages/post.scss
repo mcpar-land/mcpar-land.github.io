@@ -21,6 +21,8 @@
 .post {
 	margin-bottom: $spacing * 4;
 
+	fonts-size: 12pt;
+
 	p,
 	ul,
 	ol,
@@ -63,7 +65,7 @@
 	}
 
 	p {
-		text-indent: 1em;
+		text-indent: 0.5em;
 		margin: 0.25em 0;
 	}
 
@@ -83,28 +85,18 @@
 }
 
 code {
-	background: rgb(252, 252, 252);
+	background: rgb(248, 248, 248);
 	font-family: $font-family-code;
 	border-radius: $border-radius;
 	tab-size: 2;
+
+	&.highlighter-rouge {
+		font-size: 10pt;
+	}
 }
 
 .highlight code {
 	display: block;
 	padding: $spacing;
 	overflow-x: auto;
-}
-
-::-webkit-scrollbar {
-	width: $border-radius * 2;
-	height: $border-radius * 2;
-}
-::-webkit-scrollbar-thumb {
-	background: #e6e6e6;
-	border-radius: $border-radius;
-}
-
-::-webkit-scrollbar-track {
-	background: none;
-	border-radius: $border-radius;
 }

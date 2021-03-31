@@ -6,10 +6,7 @@
 		padding: 32px 0px;
 	}
 	@include breakpoint-min('sm') {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
+		padding-top: 20vh;
 	}
 }
 
@@ -58,6 +55,8 @@
 
 .posts-list {
 	width: 100%;
+	display: flex;
+	flex-direction: column;
 	.posts-list-item {
 		width: 100%;
 		display: flex;
@@ -77,6 +76,13 @@
 		text-align: right;
 		@include breakpoint('md') {
 			text-align: left;
+		}
+	}
+
+	.posts-rss {
+		align-self: flex-end;
+		a {
+			color: $font-color-light;
 		}
 	}
 }

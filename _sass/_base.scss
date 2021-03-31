@@ -74,3 +74,17 @@ a {
 	text-align: center;
 	font-family: $font-family-code;
 }
+
+::-webkit-scrollbar {
+	width: $border-radius * 2;
+	height: $border-radius * 2;
+}
+::-webkit-scrollbar-thumb {
+	background: #b4b4b4;
+	border-radius: $border-radius;
+}
+
+::-webkit-scrollbar-track {
+	background: none;
+	border-radius: $border-radius;
+}
