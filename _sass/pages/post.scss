@@ -71,10 +71,13 @@
 
 	img,
 	video {
+		border-radius: $border-radius;
 		margin: $spacing auto;
 		text-align: center;
 		display: block;
 		max-width: 100%;
+
+		box-shadow: 0px 2px 3px black;
 	}
 
 	iframe {
@@ -90,8 +93,11 @@ code {
 	border-radius: $border-radius;
 	tab-size: 2;
 
+	font-size: 11pt;
+
 	&.highlighter-rouge {
 		font-size: 10pt;
+		padding: 4px;
 	}
 }
 

@@ -5,6 +5,10 @@ source "https://rubygems.org"
 #
 #     bundle exec jekyll serve --livereload
 #
+# Generate new code highlighting with
+#
+#     bundle exec rougify style monokai.sublime > assets/css/syntax.css
+#
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
 # gem 'therubyracer'

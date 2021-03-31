@@ -23,6 +23,7 @@ Here's an example Gouge (like a slash, but deeper) bot with a single command, _b
 - _kind_, for which kind of bagel to order. It should only ever be one of these: _Plain, Blueberry, Poppy, Cinnamon_.
 - _amount_, an integer for the amount of bagels to order.
 
+<!-- prettier-ignore -->
 ```tsx
 import { GougeClient, command } from 'gouge'
 
@@ -43,7 +44,9 @@ client.with(
 		])
 		.integer('amount', 'The amount of bagels to order', true)
 		.handler(async (client, respond, [kind, amount]) => {
-			await respond('You ordered ' + amount + ' ' + kind + ' bagels.')
+			await respond(
+				'You ordered ' + amount + ' ' + kind + ' bagels.'
+			)
 		})
 )
 
