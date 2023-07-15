@@ -1,0 +1,178 @@
+:root {
+  --disabled: #b1b1b1;
+}
+
+::selection {
+  background: #0000ff;
+  color: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Times New Roman', Times, serif;
+  background: #fffff8;
+  margin: 0;
+  padding: 5px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#site-wrapper-right {
+  /* background: red; */
+  width: 100%;
+  height: fit-content;
+  max-width: 700px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+#site-wrapper-left {
+  width: 100%;
+  height: fit-content;
+  max-width: 600px;
+
+  padding-bottom: 100px;
+}
+
+#site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+@media (max-width: 250px) {
+  #site-header {
+    flex-direction: column;
+  }
+}
+
+#site-title {
+  display: block;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+#site-links {
+  display: flex;
+  gap: 1ch;
+  justify-content: flex-end;
+  text-align: right;
+  flex-wrap: wrap;
+}
+
+#post-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.post-list-post {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.post-list-header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.post-list-line {
+  height: 1px;
+  background: var(--disabled);
+  flex-grow: 1;
+  margin: 0px 10px;
+  margin-top: 2px;
+}
+
+.post-title {
+  font-size: 32pt;
+  line-height: 1em;
+  margin-bottom: 0;
+}
+
+.post-description {
+  font-size: 18pt;
+  line-height: 1em;
+  margin: 10px 0px;
+}
+
+.post-date {
+  font-size: 10pt;
+  color: var(--disabled);
+  margin: 0;
+}
+
+/* ==== MARKDOWN ============================================================ */
+
+.markdown img {
+  max-width: 100%;
+}
+
+.markdown blockquote {
+  border-left: 1px solid var(--disabled);
+  margin-inline-start: 10px;
+  margin-inline-end: 10px;
+  padding-left: 10px;
+  color: #3a3a3a;
+}
+
+.markdown ul {
+  padding-inline-start: 20px;
+}
+
+.markdown .footnote-reference::before {
+  content: '[';
+}
+
+.markdown .footnote-reference::after {
+  content: ']';
+}
+
+.markdown .footnote-definition-label::before {
+  content: '[';
+}
+
+.markdown .footnote-definition-label::after {
+  content: ']';
+}
+
+.markdown .footnote-definition p {
+  display: inline;
+}
+
+.markdown table {
+  min-width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+.markdown td {
+  border: 1px solid var(--disabled);
+  padding: 4px;
+}
+
+.markdown pre {
+  background: none !important;
+  tab-size: 2;
+
+  overflow-x: auto;
+}
+
+/* ==== GENERIC ============================================================= */
+
+hr {
+  height: 1px;
+  background: var(--disabled);
+  border: none;
+}

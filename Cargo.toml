@@ -1,0 +1,15 @@
+[package]
+name = "mcpar-land-site"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.71"
+chrono = "0.4.26"
+gray_matter = "0.2.6"
+highlight-pulldown = "0.1.0"
+maud = "0.25.0"
+pulldown-cmark = "0.9.3"
+serde = "1.0.171"
