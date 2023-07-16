@@ -395,6 +395,7 @@ dependencies = [
  "pulldown-cmark",
  "rss",
  "serde",
+ "syntect",
 ]
 
 [[package]]

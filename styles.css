@@ -164,6 +164,10 @@ body {
   content: ']';
 }
 
+.markdown .footnote-definition {
+  font-size: 11pt;
+}
+
 .markdown .footnote-definition-label::before {
   content: '[';
 }

@@ -16,6 +16,10 @@ fn main() -> Result<()> {
 	// if std::path::Path::new("./output").is_dir() {
 	// 	std::fs::remove_dir_all("./output")?;
 	// }
+
+	println!("📝 Loading syntax sets");
+	syntect::parsing::SyntaxSet::load_from_folder("./syntaxes")?;
+
 	std::fs::create_dir_all("./output/posts")?;
 
 	println!("🗃️  Generating webpages.");
