@@ -194,6 +194,11 @@ body {
   overflow-x: auto;
 }
 
+.markdown video {
+  width: 100%;
+  border-radius: 10px;
+}
+
 /* ==== GENERIC ============================================================= */
 
 hr {

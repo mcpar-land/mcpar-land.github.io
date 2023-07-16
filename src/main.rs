@@ -42,15 +42,18 @@ fn main() -> Result<()> {
 }
 
 fn homepage() -> Result<Markup> {
+	let all_posts = read_all_posts()?;
 	Ok(html! {
 		p {
 			"Hello, welcome to the website."
 		}
 		.post-list {
-			@for post in read_all_posts()?.iter().take(3) {
+			@for post in all_posts.iter().take(3) {
 				(post.as_list_item())
 			}
-			a href="/blog.html" style="text-align:right;" { "See All" }
+			a href="/blog.html" style="text-align:right;" {
+				"See All " (all_posts.len()) " Posts"
+			}
 		}
 	})
 }
