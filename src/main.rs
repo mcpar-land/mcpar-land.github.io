@@ -1,25 +1,29 @@
-use std::path::PathBuf;
+use std::{fs::DirEntry, path::PathBuf};
 
 use maud::{html, Markup, Render};
 use post::{parse_post_from_file, Post};
 
-use crate::post::read_all_posts;
+use crate::{blog::blog_list, post::read_all_posts, rss::rss_feed};
 
+pub mod blog;
 pub mod post;
+pub mod rss;
 pub mod util;
 
 fn main() -> Result<()> {
-	println!("🗑️  Deleting output directory");
+	// println!("🗑️  Deleting output directory");
 
-	if std::path::Path::new("./output").is_dir() {
-		std::fs::remove_dir_all("./output")?;
-	}
+	// if std::path::Path::new("./output").is_dir() {
+	// 	std::fs::remove_dir_all("./output")?;
+	// }
 	std::fs::create_dir_all("./output/posts")?;
 
 	println!("🗃️  Generating webpages.");
 
 	// Write all pages
 	output("index.html", homepage()?, Some(base_template))?;
+	output("blog.html", blog_list()?, Some(base_template))?;
+	output("feed.rss", rss_feed()?, None)?;
 
 	// Write all posts
 	for post in read_all_posts()? {
@@ -42,27 +46,11 @@ fn homepage() -> Result<Markup> {
 		p {
 			"Hello, welcome to the website."
 		}
-		(post_list()?)
-	})
-}
-
-fn post_list() -> Result<Markup> {
-	Ok(html! {
-		#post-list {
-			@for post in read_all_posts()? {
-				.post-list-post {
-					.post-list-header {
-						a.post-list-title href=(post.href) { (post.frontmatter.title) }
-						.post-list-line {}
-						.post-list-date {
-							(post.date.format("%B %d, %Y"))
-						}
-					}
-					.post-list-description {
-						(post.frontmatter.description)
-					}
-				}
+		.post-list {
+			@for post in read_all_posts()?.iter().take(3) {
+				(post.as_list_item())
 			}
+			a href="/blog.html" style="text-align:right;" { "See All" }
 		}
 	})
 }
@@ -82,17 +70,28 @@ fn base_template(children: Markup) -> Result<Markup> {
 			body {
 				#site-wrapper-right {
 					#site-wrapper-left {
-						#site-header {
-							a #site-title href="/" { "john mcparland" }
-							#site-links {
+						header #site-header {
+							a #site-title href="/" {
+								#site-title-text { "john mcparland" }
+								// img src="/static/starheart.gif";
+							}
+
+							nav #site-links {
 								a href="/about" { "about" }
-								a href="/twitter" { "twitter" }
-								a href="/" { "blog" }
-								a href="/rss" { "rss" }
+								a href="/blog.html" { "blog" }
+								a href="/feed.rss" { "rss" }
+								a href="https://twitter.com/mcpar_land" target="_blank" { "twitter" }
+								a href="https://github.com/mcpar-land" target="_blank" { "github" }
 							}
 						}
 						#children {
 							(children)
+						}
+						footer #site-footer {
+							#site-copyright {
+								("© John McParland ");
+								(chrono::offset::Utc::now().format("%Y"))
+							}
 						}
 					}
 				}

@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use anyhow::anyhow;
-use chrono::NaiveDate;
+use chrono::{DateTime, NaiveDate, NaiveTime, Utc};
 use gray_matter::{engine::YAML, Matter};
 use maud::{html, Markup, PreEscaped, Render};
 use pulldown_cmark::Options;
@@ -19,6 +19,9 @@ pub fn read_all_posts() -> Result<Vec<Post>> {
 		parsed_posts.push(post);
 	}
 
+	parsed_posts.sort();
+	parsed_posts.reverse();
+
 	Ok(parsed_posts)
 }
 
@@ -30,21 +33,62 @@ pub struct Post {
 	pub content: Markup,
 }
 
+impl Post {
+	pub fn as_list_item(&self) -> Markup {
+		html! {
+			.post-list-post {
+				.post-list-header {
+					a.post-list-title href=(self.href) { (self.frontmatter.title) }
+					.post-list-line {}
+					.post-list-date {
+						(self.date.format("%B %d, %Y"))
+					}
+				}
+				.post-list-description {
+					(self.frontmatter.description)
+				}
+			}
+		}
+	}
+}
+
 impl Render for Post {
 	fn render(&self) -> Markup {
 		html! {
 			h1.post-title { (self.frontmatter.title) }
-			p.post-description {
+			.post-description {
 				(self.frontmatter.description)
 			}
-			p.post-date {
+			time.post-date datetime=(self.date.format("%Y-%m-%d")) {
 				(self.date.format("%B %d, %Y"))
 			}
 			hr;
-			.markdown {
+			article.markdown {
 				(self.content)
 			}
 		}
+	}
+}
+
+impl PartialEq for Post {
+	fn eq(&self, other: &Self) -> bool {
+		self.date.eq(&other.date)
+	}
+}
+
+impl Eq for Post {
+	fn assert_receiver_is_total_eq(&self) {}
+}
+
+impl PartialOrd for Post {
+	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+		self.date.partial_cmp(&other.date)
+	}
+}
+
+impl Ord for Post {
+	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+		self.date.cmp(&other.date)
 	}
 }
 

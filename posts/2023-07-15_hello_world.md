@@ -5,6 +5,8 @@ description: This is a post.
 
 This is an example post from today.
 
+![star heart](/static/starheart.gif)
+
 # h1 Heading 8-)
 
 ## h2 Heading
