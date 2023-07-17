@@ -11,7 +11,7 @@ Hey, I haven't posted anything here for a while! A bunch has happened in my life
 
 That last one is mostly through my job. Nothing puts you through the crucible like coding for 8 hours. My toolbox now includes Golang and Python, on top of everything else.
 
-But the big event for posting here is the new website. Recent events in the web-service / social media world have left me very, very disillusioned with how with modern web trends[^1], and I've found myself nostalgic for the pre-FAANG internet. So I rebuilt my personal site with that philosophy as the guide for both aesthetics and implementation.
+But the big event for posting here is the new website. Recent events in the web-service / social media world have left me very, very disillusioned with modern web trends[^1], and I've found myself nostalgic for the pre-FAANG internet. So I rebuilt my personal site with that philosophy as the guide for both aesthetics and implementation.
 
 ## The Look
 
@@ -37,7 +37,7 @@ I'd love to write up a series with a guide to rolling your own static site gen i
 
 I'm also just eager to write more on here in general. Reading the stuff from resources like [Hundred Rabbits](https://100r.co/site/home.html) and [Permacomputing](https://permacomputing.net/) has lit a fire under me for software dev outside of the current commercial model.
 
-Moving off of the FAANG / Microsoft services that are interested in turning my code and/or writing into AI training fodder is never going to be a complete project, but shifting away from them will be an ongoing project for me.
+Moving off of the FAANG / Microsoft services that are interested in turning my code and/or writing into AI training fodder is never going to be a complete project, but shifting away from them will be an ongoing project for me. Maybe [Neocities](https://neocities.org/) is a good host for the future.
 
 ---
 

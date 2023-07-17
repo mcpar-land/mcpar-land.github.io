@@ -140,6 +140,10 @@ body {
 
 /* ==== MARKDOWN ============================================================ */
 
+.markdown p {
+  text-align: justify;
+}
+
 .markdown img {
   max-width: 100%;
 }

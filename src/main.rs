@@ -49,7 +49,8 @@ fn homepage() -> Result<Markup> {
 	let all_posts = read_all_posts()?;
 	Ok(html! {
 		p {
-			"Hello, welcome to the website."
+			"Hello! I'm a developer located in Boston, and this is my website. "
+			"Take a look around."
 		}
 		.post-list {
 			@for post in all_posts.iter().take(3) {
@@ -84,7 +85,7 @@ fn base_template(children: Markup) -> Result<Markup> {
 							}
 
 							nav #site-links {
-								a href="/about" { "about" }
+								// a href="/about" { "about" }
 								a href="/blog.html" { "blog" }
 								a href="/feed.rss" { "rss" }
 								a href="https://twitter.com/mcpar_land" target="_blank" { "twitter" }
