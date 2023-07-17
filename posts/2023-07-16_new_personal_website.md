@@ -9,7 +9,7 @@ Hey, I haven't posted anything here for a while! A bunch has happened in my life
 - I moved to Boston! I like it here a lot more than Texas.
 - I've learned a LOT more and expanded my programming toolbox.
 
-That last one is mostly through my job. Nothing puts you through the crucible like coding for 8 hours. My toolbox now includes Golang and Python, on top of everything else.
+That last one is mostly through my job. Nothing puts you through the crucible like coding for 8 hours a day. My toolbox now includes Golang and Python, on top of everything else.
 
 But the big event for posting here is the new website. Recent events in the web-service / social media world have left me very, very disillusioned with modern web trends[^1], and I've found myself nostalgic for the pre-FAANG internet. So I rebuilt my personal site with that philosophy as the guide for both aesthetics and implementation.
 
