@@ -33,11 +33,11 @@ I'd love to make it a project to, over time, bring this dependency list down to 
 
 # Now What?
 
-I'd love to write up a series with a guide to rolling your own static site gen in rust. Turns out SSG is a very functional, as in functional programming, problem; takes input files, creates output files. No IO, no event handling. Rust is great for coding in the FP style, but this would also be a fun project to do in Haskell. Look out for more posts about this in the near future.
+I'd love to write up a series with a guide to rolling your own static site gen in Rust. Turns out SSG is a very functional, as in functional programming, problem; takes input files, creates output files. No IO, no event handling. Rust is great for coding in the FP style, but this would also be a fun project to do in Haskell. Look out for more posts about this in the near future.
 
-I'm also just eager to write more on here in general. Reading the stuff from resources like [Hundred Rabbits](https://100r.co/site/home.html) and [Permacomputing](https://permacomputing.net/) has lit a fire under me for software dev outside of the current commercial model.
+I'm also just eager to write more on here in general. Reading resources like [Hundred Rabbits](https://100r.co/site/home.html) and [Permacomputing](https://permacomputing.net/) has lit a fire under me for software dev outside of the current commercial model.
 
-Moving off of the FAANG / Microsoft services that are interested in turning my code and/or writing into AI training fodder is never going to be a complete project, but shifting away from them will be an ongoing project for me. Maybe [Neocities](https://neocities.org/) is a good host for the future.
+Moving off of the FAANG / Microsoft services is never going to be complete, but shifting away from them will be an ongoing project for me. Maybe [Neocities](https://neocities.org/) is a good host for the future. The more I divorce my code from them, the less my code gets used for AI training fodder.
 
 ---
 
