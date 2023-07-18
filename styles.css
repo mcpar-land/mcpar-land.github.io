@@ -1,5 +1,7 @@
 :root {
   --disabled: #b1b1b1;
+  --page-width: 600px;
+  --page-pad: 100px;
 }
 
 ::selection {
@@ -24,15 +26,15 @@ body {
   /* background: red; */
   width: 100%;
   height: fit-content;
-  max-width: 700px;
+  max-width: calc(var(--page-width) + var(--page-pad) * 2);
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 #site-wrapper-left {
   width: 100%;
   height: fit-content;
-  max-width: 600px;
+  max-width: var(--page-width);
 }
 
 #site-header {
