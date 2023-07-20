@@ -1,7 +1,7 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use anyhow::anyhow;
-use chrono::{DateTime, NaiveDate, NaiveTime, Utc};
+use chrono::NaiveDate;
 use gray_matter::{engine::YAML, Matter};
 use maud::{html, Markup, PreEscaped, Render};
 use pulldown_cmark::Options;
@@ -48,6 +48,14 @@ impl Post {
 					(self.frontmatter.description)
 				}
 			}
+		}
+	}
+
+	pub fn opengraph_head(&self) -> Markup {
+		html! {
+			meta property="og:title" content=(&self.frontmatter.title);
+			meta property="og:description" content=(&self.frontmatter.description);
+			meta property="og:article:published_time" content=(self.date);
 		}
 	}
 }

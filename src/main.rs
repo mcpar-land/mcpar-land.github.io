@@ -24,16 +24,19 @@ fn main() -> Result<()> {
 
 	println!("🗃️  Generating webpages.");
 
+	let og = Some(basic_opengraph("john mcparland", "Hello!"));
+
 	// Write all pages
-	output("index.html", homepage()?, Some(base_template))?;
-	output("blog.html", blog_list()?, Some(base_template))?;
-	output("feed.rss", rss_feed()?, None)?;
+	output("index.html", homepage()?, og.clone(), Some(base_template))?;
+	output("blog.html", blog_list()?, og.clone(), Some(base_template))?;
+	output("feed.xml", rss_feed()?, None, None)?;
 
 	// Write all posts
 	for post in read_all_posts()? {
 		output(
 			format!("posts/{}.html", &post.filename),
 			post.render(),
+			Some(post.opengraph_head()),
 			Some(base_template),
 		)?;
 	}
@@ -63,7 +66,14 @@ fn homepage() -> Result<Markup> {
 	})
 }
 
-fn base_template(children: Markup) -> Result<Markup> {
+fn basic_opengraph(title: &str, desc: &str) -> Markup {
+	html! {
+		meta property="og:title" content=(title);
+		meta property="og:description" content=(desc);
+	}
+}
+
+fn base_template(children: Markup, head: Option<Markup>) -> Result<Markup> {
 	let css = std::fs::read_to_string("./styles.css")?;
 
 	Ok(html! {
@@ -73,6 +83,10 @@ fn base_template(children: Markup) -> Result<Markup> {
 				meta name="viewport" content="width=device-width, initial-scale=1.0";
 				style {
 					(css)
+				}
+				link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml";
+				@if let Some(head) = head {
+					(head)
 				}
 			}
 			body {
@@ -87,7 +101,7 @@ fn base_template(children: Markup) -> Result<Markup> {
 							nav #site-links {
 								// a href="/about" { "about" }
 								a href="/blog.html" { "blog" }
-								a href="/feed.rss" { "rss" }
+								a href="/feed.xml" { "rss" }
 								a href="https://twitter.com/mcpar_land" target="_blank" { "twitter" }
 								a href="https://github.com/mcpar-land" target="_blank" { "github" }
 							}
@@ -111,6 +125,7 @@ fn base_template(children: Markup) -> Result<Markup> {
 fn output<P: Into<PathBuf>>(
 	path: P,
 	value: Markup,
+	head: Option<Markup>,
 	template: Option<TemplateFn>,
 ) -> Result<()> {
 	let path: PathBuf = path.into();
@@ -120,7 +135,7 @@ fn output<P: Into<PathBuf>>(
 	println!("📄 {}", path.as_os_str().to_string_lossy());
 
 	let value = match template {
-		Some(template) => template(value)?,
+		Some(template) => template(value, head)?,
 		None => value,
 	};
 
@@ -129,6 +144,6 @@ fn output<P: Into<PathBuf>>(
 	Ok(())
 }
 
-type TemplateFn = fn(children: Markup) -> Result<Markup>;
+type TemplateFn = fn(children: Markup, head: Option<Markup>) -> Result<Markup>;
 
 pub type Result<T> = std::result::Result<T, anyhow::Error>;
