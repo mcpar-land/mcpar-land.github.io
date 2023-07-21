@@ -58,10 +58,8 @@ impl Post {
 			meta property="og:article:published_time" content=(self.date);
 		}
 	}
-}
 
-impl Render for Post {
-	fn render(&self) -> Markup {
+	pub fn render(&self, prev: Option<&Post>, next: Option<&Post>) -> Markup {
 		html! {
 			h1.post-title { (self.frontmatter.title) }
 			.post-description {
@@ -73,6 +71,23 @@ impl Render for Post {
 			hr;
 			article.markdown {
 				(self.content)
+			}
+			hr.pn-rule;
+			.post-prev-next {
+				@if let Some(prev) = prev {
+					.pn-item.pn-prev {
+						.pn-title { (&prev.frontmatter.title) }
+						.pn-description { (&prev.frontmatter.description) }
+						a.pn-link href=(&prev.href) { "← Previous" }
+					}
+				}
+				@if let Some(next) = next {
+					.pn-item.pn-next {
+						.pn-title { (&next.frontmatter.title) }
+						.pn-description { (&next.frontmatter.description) }
+						a.pn-link href=(&next.href) { "Next →" }
+					}
+				}
 			}
 		}
 	}

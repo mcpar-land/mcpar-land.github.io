@@ -3,7 +3,9 @@ use std::{fs::DirEntry, path::PathBuf};
 use maud::{html, Markup, Render};
 use post::{parse_post_from_file, Post};
 
-use crate::{blog::blog_list, post::read_all_posts, rss::rss_feed};
+use crate::{
+	blog::blog_list, post::read_all_posts, rss::rss_feed, util::Siblings,
+};
 
 pub mod blog;
 pub mod post;
@@ -31,11 +33,14 @@ fn main() -> Result<()> {
 	output("blog.html", blog_list()?, og.clone(), Some(base_template))?;
 	output("feed.xml", rss_feed()?, None, None)?;
 
+	let mut all_posts = read_all_posts()?;
+	all_posts.reverse();
+
 	// Write all posts
-	for post in read_all_posts()? {
+	for (prev, post, next) in Siblings::new(&all_posts) {
 		output(
 			format!("posts/{}.html", &post.filename),
-			post.render(),
+			post.render(prev, next),
 			Some(post.opengraph_head()),
 			Some(base_template),
 		)?;

@@ -130,6 +130,37 @@ body {
   margin: 0;
 }
 
+.pn-rule {
+  margin: 20px 0px;
+}
+
+.post-prev-next {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+
+  .pn-prev {
+    text-align: left;
+  }
+
+  .pn-next {
+    text-align: right;
+  }
+
+  .pn-title {
+    font-weight: bold;
+  }
+
+  .pn-description {
+    font-style: italic;
+  }
+
+  .pn-link {
+    font-style: italic;
+  }
+}
+
 #site-footer {
   padding-top: 50px;
   padding-bottom: 100px;
