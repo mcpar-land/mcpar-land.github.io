@@ -80,6 +80,8 @@ impl Post {
 						.pn-description { (&prev.frontmatter.description) }
 						a.pn-link href=(&prev.href) { "← Previous" }
 					}
+				} @else {
+					div {}
 				}
 				@if let Some(next) = next {
 					.pn-item.pn-next {
@@ -87,6 +89,8 @@ impl Post {
 						.pn-description { (&next.frontmatter.description) }
 						a.pn-link href=(&next.href) { "Next →" }
 					}
+				} @else {
+					div {}
 				}
 			}
 		}
