@@ -29,6 +29,8 @@ fn main() -> Result<()> {
 
 	std::fs::create_dir_all("./output/posts")?;
 
+	std::fs::copy("./robots.txt", "./output/robots.txt")?;
+
 	println!("🗃️  Generating webpages.");
 
 	let builder = PageBuilder::new()
