@@ -238,7 +238,7 @@ body {
 
 .markdown video {
   width: 100%;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 /* ==== GENERIC ============================================================= */
@@ -247,4 +247,29 @@ hr {
   height: 1px;
   background: var(--disabled);
   border: none;
+}
+
+/* ==== DARK MODE =========================================================== */
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1a1a1a;
+    color: #fffff8;
+  }
+
+  #site-title {
+    color: #fffff8;
+  }
+
+  a:link {
+    color: #7e9cff;
+  }
+
+  a:visited {
+    color: #856aff;
+  }
+
+  pre {
+    filter: invert(1); /** check this shit out */
+  }
 }
