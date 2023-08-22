@@ -172,6 +172,20 @@ body {
   color: var(--disabled);
 }
 
+.not-found-frame {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+}
+
+.not-found-header {
+  font-size: 40pt;
+}
+
+.not-found-subtitle {
+  text-align: center;
+}
+
 /* ==== MARKDOWN ============================================================ */
 
 .markdown p {

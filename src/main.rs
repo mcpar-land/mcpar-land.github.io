@@ -45,6 +45,7 @@ fn main() -> Result<()> {
 		.body(rss_feed()?)
 		.no_template()
 		.write("feed.xml")?;
+	builder.clone().body(page404()?).write("404.html")?;
 
 	let mut all_posts = read_all_posts()?;
 	all_posts.reverse();
@@ -88,6 +89,22 @@ fn homepage() -> Result<Markup> {
 			}
 			a href="/blog.html" style="text-align:right;" {
 				"See All " (all_posts.len()) " Posts"
+			}
+		}
+	})
+}
+
+fn page404() -> Result<Markup> {
+	Ok(html! {
+		.not-found-frame {
+			p.not-found-header {
+				"404"
+			}
+			p {
+				"Page not found!"
+			}
+			p {
+				a href="/" { "Back to home" }
 			}
 		}
 	})
