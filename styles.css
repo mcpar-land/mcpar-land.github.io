@@ -80,10 +80,6 @@ body {
   gap: 16px;
 }
 
-.post-list-with-dates {
-  padding-top: 20px;
-}
-
 .post-list-date-header {
   margin-block-start: 0;
   margin-block-end: 0;
@@ -122,6 +118,12 @@ body {
   font-size: 18pt;
   line-height: 1em;
   margin: 10px 0px;
+}
+
+.post-tags {
+  display: flex;
+  gap: 1ch;
+  margin-bottom: 10px;
 }
 
 .post-date {
@@ -186,6 +188,11 @@ body {
   text-align: center;
 }
 
+.back-to-top {
+  width: 100%;
+  text-align: right;
+}
+
 /* ==== MARKDOWN ============================================================ */
 
 .markdown p {
@@ -194,6 +201,13 @@ body {
 
 .markdown img {
   max-width: 100%;
+}
+
+.markdown .markdown-image-title {
+  font-style: italic;
+  color: #3a3a3a;
+  text-align: center;
+  margin-top: -10px;
 }
 
 .markdown blockquote {

@@ -1,6 +1,7 @@
 ---
 title: Teaching Myself Rust, Part 1
 description: Baduk & Bevy
+tags: [rust, game-dev]
 ---
 
 [mcpar-land/bevy_baduk](https://github.com/mcpar-land/bevy_baduk)

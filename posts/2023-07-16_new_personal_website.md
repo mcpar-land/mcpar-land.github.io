@@ -1,6 +1,7 @@
 ---
 title: New Personal Website
 description: 2000 is the new 2024!
+tags: [rust, patch-note]
 ---
 
 Hey, I haven't posted anything here for a while! A bunch has happened in my life over the pandemic.

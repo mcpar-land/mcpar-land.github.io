@@ -26,6 +26,11 @@ pub fn blog_list() -> Result<Markup> {
 	}
 
 	Ok(html! {
+		p {
+			"Posts by date"
+			" - ";
+			a href="/tags.html" { "Posts by tag" }
+		}
 		.post-list.post-list-with-dates {
 			@for item in items {
 				@match item {

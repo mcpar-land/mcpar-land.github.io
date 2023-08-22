@@ -1,6 +1,7 @@
 ---
 title: Bevy Fly Camera
 description: Pleasant utility for Bevy
+tags: [rust, game-dev]
 ---
 
 Since the 0.1 release of my favorite Rust game engine, [Bevy](https://bevyengine.org/), I've been maintaining the crate [bevy-fly-camera](https://crates.io/crates/bevy_fly_camera), slowly adding to its tiny suite of features and keeping it updated with the engine's rapidly-changing alpha versions. The idea is that having a free-move camera is one of the best features to have during early iteration, so a super bog-simple to use crate that you can stick in your code in as few lines as possible fills a very important niche.

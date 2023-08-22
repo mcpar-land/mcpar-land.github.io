@@ -1,6 +1,7 @@
 ---
 title: Truchet Patterns
 description: Toy p5.js sketch
+tags: [js]
 ---
 
 Based on the [Multi-Scale Truchet Patterns paper](http://archive.bridgesmathart.org/2018/bridges2018-39.pdf), I put together this quick p5 sketch. Click to generate a new pattern.

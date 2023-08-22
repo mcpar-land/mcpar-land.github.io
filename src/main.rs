@@ -8,13 +8,14 @@ use post::{parse_post_from_file, Post};
 
 use crate::{
 	blog::blog_list, page_builder::PageBuilder, post::read_all_posts,
-	rss::rss_feed, util::Siblings,
+	rss::rss_feed, tags::gen_tag_pages, util::Siblings,
 };
 
 pub mod blog;
 pub mod page_builder;
 pub mod post;
 pub mod rss;
+pub mod tags;
 pub mod util;
 
 fn main() -> Result<()> {
@@ -45,6 +46,7 @@ fn main() -> Result<()> {
 		.body(rss_feed()?)
 		.no_template()
 		.write("feed.xml")?;
+	gen_tag_pages(&builder)?;
 	builder.clone().body(page404()?).write("404.html")?;
 
 	let mut all_posts = read_all_posts()?;

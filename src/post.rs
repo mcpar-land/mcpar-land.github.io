@@ -65,6 +65,11 @@ impl Post {
 			.post-description {
 				(self.frontmatter.description)
 			}
+			.post-tags {
+				@for tag in &self.frontmatter.tags {
+					a href=(format!("/tag/{}.html", tag)) { (tag) }
+				}
+			}
 			time.post-date datetime=(self.date.format("%Y-%m-%d")) {
 				(self.date.format("%B %d, %Y"))
 			}
@@ -72,6 +77,7 @@ impl Post {
 			article.markdown {
 				(self.content)
 			}
+			p.back-to-top { a href="#" { "↑ Top" } }
 			hr.pn-rule;
 			.post-prev-next {
 				@if let Some(prev) = prev {
@@ -123,6 +129,7 @@ impl Ord for Post {
 pub struct PostFrontmatter {
 	pub title: String,
 	pub description: String,
+	pub tags: Vec<String>,
 }
 
 pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
@@ -165,17 +172,39 @@ pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 }
 
 fn parse_markdown(input: &str) -> String {
-	let mut options = Options::empty();
-	options.insert(Options::ENABLE_TABLES);
-	options.insert(Options::ENABLE_STRIKETHROUGH);
-	options.insert(Options::ENABLE_FOOTNOTES);
-	options.insert(Options::ENABLE_SMART_PUNCTUATION);
-
-	let parser = pulldown_cmark::Parser::new_ext(&input, options);
+	let parser = pulldown_cmark::Parser::new_ext(&input, markdown_options());
+	let parser = parse_markdown_custom(parser.into_iter());
 	let parser =
 		highlight_pulldown::highlight_with_theme(parser, "InspiredGitHub").unwrap();
 	let mut html_output = String::new();
 	pulldown_cmark::html::push_html(&mut html_output, parser.into_iter());
 
 	html_output
+}
+
+fn parse_markdown_custom<'a, I: Iterator<Item = pulldown_cmark::Event<'a>>>(
+	iter: I,
+) -> impl Iterator<Item = pulldown_cmark::Event<'a>> {
+	use pulldown_cmark::{CowStr, Event, Tag};
+	iter.map(|event| match event {
+		Event::Start(Tag::Image(_link_type, url, title)) => {
+			let v = html! {
+				img src=(url) title=(title);
+				@if title.as_ref().trim().len() > 0 {
+					p class="markdown-image-title" { (title) }
+				}
+			};
+			Event::Html(CowStr::from(v.0))
+		}
+		v => v,
+	})
+}
+
+fn markdown_options() -> Options {
+	let mut options = Options::empty();
+	options.insert(Options::ENABLE_TABLES);
+	options.insert(Options::ENABLE_STRIKETHROUGH);
+	options.insert(Options::ENABLE_FOOTNOTES);
+	options.insert(Options::ENABLE_SMART_PUNCTUATION);
+	options
 }

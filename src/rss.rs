@@ -1,5 +1,6 @@
 use chrono::{DateTime, NaiveTime, Utc};
 use maud::{html, Markup, PreEscaped};
+use rss::Category;
 use rss::{validation::Validate, ChannelBuilder};
 
 use crate::post::{read_all_posts, Post};
@@ -31,6 +32,15 @@ impl Post {
 		rss::Item {
 			title: Some(self.frontmatter.title.clone()),
 			link: Some(format!("https://mcpar.land{}", self.href)),
+			categories: self
+				.frontmatter
+				.tags
+				.iter()
+				.map(|tag| Category {
+					name: tag.clone(),
+					domain: None,
+				})
+				.collect(),
 			pub_date: Some(
 				DateTime::<Utc>::from_utc(self.date.and_time(NaiveTime::MIN), Utc)
 					.to_rfc2822(),
