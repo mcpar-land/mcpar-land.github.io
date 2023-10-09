@@ -61,8 +61,8 @@ impl Post {
 
 	pub fn render(&self, prev: Option<&Post>, next: Option<&Post>) -> Markup {
 		html! {
-			h1.post-title { (self.frontmatter.title) }
-			.post-description {
+			h1.post-title style=(format!("view-transition-name: post-title-{}",  self.filename)) { (self.frontmatter.title) }
+			.post-description style=(format!("view-transition-name: post-desc-{}",  self.filename))  {
 				(self.frontmatter.description)
 			}
 			.post-tags {
@@ -70,7 +70,7 @@ impl Post {
 					a href=(format!("/tag/{}.html", tag)) { (tag) }
 				}
 			}
-			time.post-date datetime=(self.date.format("%Y-%m-%d")) {
+			time.post-date datetime=(self.date.format("%Y-%m-%d")) style=(format!("view-transition-name: post-date-{}",  self.filename)) {
 				(self.date.format("%B %d, %Y"))
 			}
 			hr;

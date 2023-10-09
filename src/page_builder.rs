@@ -76,6 +76,7 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 		html {
 			(maud::DOCTYPE)
 			head {
+				meta name="view-transition" content="same-origin";
 				meta name="viewport" content="width=device-width, initial-scale=1.0";
 				style {
 					(css)

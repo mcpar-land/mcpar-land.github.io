@@ -13,6 +13,11 @@
   box-sizing: border-box;
 }
 
+html {
+  /* hack to fix scrollbar nudging site over */
+  margin-left: calc(100vw - 100%);
+}
+
 body {
   font-family: 'Times New Roman', Times, serif;
   background: #fffff8;
@@ -168,6 +173,7 @@ body {
   padding-bottom: 100px;
   color: var(--disabled);
   text-align: center;
+  view-transition-name: site-footer;
 }
 
 #site-footer a {
