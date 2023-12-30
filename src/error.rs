@@ -9,7 +9,6 @@ pub enum Error {
 	InvalidPostFile { path: PathBuf, reason: String },
 	NoChildrenNoTemplate,
 	Fs(std::io::Error),
-	Rss(rss::validation::ValidationError),
 	Zip(zip::result::ZipError),
 	SyntaxLoading(syntect::LoadingError),
 }
@@ -17,12 +16,6 @@ pub enum Error {
 impl From<std::io::Error> for Error {
 	fn from(err: std::io::Error) -> Self {
 		Self::Fs(err)
-	}
-}
-
-impl From<rss::validation::ValidationError> for Error {
-	fn from(err: rss::validation::ValidationError) -> Self {
-		Self::Rss(err)
 	}
 }
 

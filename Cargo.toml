@@ -9,7 +9,6 @@ edition = "2021"
 highlight-pulldown = "0.2.2"
 maud = "0.25.0"
 pulldown-cmark = "0.9.3"
-rss = { version = "2.0.4", features = ["chrono", "validation"] }
 syntect = "5.0.0"
 zip = "0.5.13"
 zip-extensions = "0.6.1"

@@ -45,7 +45,7 @@ fn parse_tags(tags: &str) -> Result<Vec<String>, ParsingError> {
 			.strip_suffix("]")
 			.ok_or_else(err)?
 			.split(",")
-			.map(String::from)
+			.map(|s| s.trim().to_string())
 			.collect::<Vec<String>>(),
 	)
 }
