@@ -1,13 +1,11 @@
-use std::path::Path;
-
-use anyhow::anyhow;
 use chrono::NaiveDate;
 use gray_matter::{engine::YAML, Matter};
-use maud::{html, Markup, PreEscaped, Render};
+use maud::{html, Markup, PreEscaped};
 use pulldown_cmark::Options;
 use serde::Deserialize;
+use std::path::{Path, PathBuf};
 
-use crate::Result;
+use crate::{error::Error, Result};
 
 pub fn read_all_posts() -> Result<Vec<Post>> {
 	let posts = std::fs::read_dir("./posts")?;
@@ -133,21 +131,31 @@ pub struct PostFrontmatter {
 }
 
 pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
+	let path_buf = PathBuf::from(path.as_ref());
+
 	let filename_str = path
 		.as_ref()
 		.file_name()
-		.ok_or_else(|| anyhow!("Invalid path for post"))?
+		.ok_or_else(|| Error::FileNotFound(path_buf.clone()))?
 		.to_string_lossy()
 		.to_string();
 
-	let (date, _) = filename_str
-		.split_once("_")
-		.ok_or_else(|| anyhow!("Invalid file format {}", filename_str))?;
+	let (date, _) =
+		filename_str
+			.split_once("_")
+			.ok_or_else(|| Error::InvalidPostFile {
+				path: path_buf.clone(),
+				reason: format!("Invalid file format {}", filename_str),
+			})?;
 
 	let date = chrono::NaiveDate::parse_from_str(date, "%Y-%m-%d")?;
-	let filename_no_ext = filename_str
-		.strip_suffix(".md")
-		.ok_or_else(|| anyhow!("Post file must end in .md"))?;
+	let filename_no_ext =
+		filename_str
+			.strip_suffix(".md")
+			.ok_or_else(|| Error::InvalidPostFile {
+				path: path_buf.clone(),
+				reason: "Post file must end in .md".to_string(),
+			})?;
 	let href = format!("/posts/{}.html", &filename_no_ext);
 
 	let raw = std::fs::read_to_string(path)?;
@@ -156,8 +164,9 @@ pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 
 	let front_matter = matter
 		.parse_with_struct::<PostFrontmatter>(&raw)
-		.ok_or_else(|| {
-			anyhow!("Error in {}: Failed to parse frontmatter", &filename_str)
+		.ok_or_else(|| Error::InvalidPostFile {
+			path: path_buf,
+			reason: "failed to parse frontmatter".to_string(),
 		})?;
 
 	let html_output = parse_markdown(&front_matter.content);

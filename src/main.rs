@@ -12,6 +12,7 @@ use crate::{
 };
 
 pub mod blog;
+pub mod error;
 pub mod page_builder;
 pub mod post;
 pub mod rss;
@@ -112,4 +113,4 @@ fn page404() -> Result<Markup> {
 	})
 }
 
-pub type Result<T> = std::result::Result<T, anyhow::Error>;
+pub type Result<T> = std::result::Result<T, crate::error::Error>;

@@ -1,4 +1,4 @@
-use crate::Result;
+use crate::{error::Error, Result};
 use maud::{html, Markup, Render};
 use std::path::PathBuf;
 
@@ -61,7 +61,7 @@ impl PageBuilder {
 			if let Some(children) = &self.body {
 				std::fs::write(&output_path, &children.0)?;
 			} else {
-				return Err(anyhow::anyhow!("No children, but also no template."));
+				return Err(Error::NoChildrenNoTemplate);
 			}
 		}
 
