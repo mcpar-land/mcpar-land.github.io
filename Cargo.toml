@@ -9,7 +9,7 @@ edition = "2021"
 anyhow = "1.0.71"
 chrono = "0.4.26"
 gray_matter = "0.2.6"
-highlight-pulldown = "0.1.0"
+highlight-pulldown = "0.2.2"
 maud = "0.25.0"
 pulldown-cmark = "0.9.3"
 rss = { version = "2.0.4", features = ["chrono", "validation"] }
