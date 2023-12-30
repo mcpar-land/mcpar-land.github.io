@@ -7,7 +7,9 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.71"
+box_drawing = "0.1.2"
 chrono = "0.4.26"
+clap = { version = "4.4.7", features = ["derive"] }
 gray_matter = "0.2.6"
 highlight-pulldown = "0.1.0"
 maud = "0.25.0"
@@ -15,5 +17,6 @@ pulldown-cmark = "0.9.3"
 rss = { version = "2.0.4", features = ["chrono", "validation"] }
 serde = "1.0.171"
 syntect = "5.0.0"
+textwrap = "0.16.0"
 zip = "0.6.6"
 zip-extensions = "0.6.1"

@@ -1,3 +1,4 @@
+use clap::Parser;
 use std::{
 	fs::{DirEntry, File},
 	path::PathBuf,
@@ -13,12 +14,32 @@ use crate::{
 
 pub mod blog;
 pub mod page_builder;
+pub mod plaintext;
 pub mod post;
 pub mod rss;
 pub mod tags;
 pub mod util;
 
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+	#[arg(short, long)]
+	plaintext: bool,
+}
+
 fn main() -> Result<()> {
+	let args = Args::parse();
+
+	if args.plaintext {
+		crate::plaintext::main_plaintext()?;
+	} else {
+		main_html()?;
+	}
+
+	Ok(())
+}
+
+fn main_html() -> Result<()> {
 	// println!("🗑️  Deleting output directory");
 
 	// if std::path::Path::new("./output").is_dir() {

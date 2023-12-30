@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
 :root {
   --disabled: #b1b1b1;
-  --page-width: 600px;
+  --page-width: 80ch;
   --page-pad: 100px;
+  --color: rgb(34, 32, 31);
 }
 
 ::selection {
@@ -16,10 +19,11 @@
 html {
   /* hack to fix scrollbar nudging site over */
   margin-left: calc(100vw - 100%);
+  color: var(--color);
 }
 
 body {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'JetBrains Mono', monospace;
   background: #fffff8;
   margin: 0;
   padding: 5px;
@@ -59,7 +63,7 @@ body {
   margin-block-start: 0.67em;
   margin-block-end: 0.67em;
   font-weight: bold;
-  color: black;
+  color: var(--color);
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -281,29 +285,4 @@ hr {
   height: 1px;
   background: var(--disabled);
   border: none;
-}
-
-/* ==== DARK MODE =========================================================== */
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #1a1a1a;
-    color: #fffff8;
-  }
-
-  #site-title {
-    color: #fffff8;
-  }
-
-  a:link {
-    color: #7e9cff;
-  }
-
-  a:visited {
-    color: #856aff;
-  }
-
-  pre {
-    filter: invert(1); /** check this shit out */
-  }
 }
