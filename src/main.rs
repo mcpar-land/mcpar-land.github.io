@@ -18,6 +18,10 @@ pub mod post;
 pub mod rss;
 pub mod tags;
 pub mod util;
+pub mod parsers {
+	pub mod error;
+	pub mod frontmatter;
+}
 
 fn main() -> Result<()> {
 	// println!("🗑️  Deleting output directory");

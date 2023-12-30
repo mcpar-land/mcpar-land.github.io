@@ -1,11 +1,9 @@
 use chrono::NaiveDate;
-use gray_matter::{engine::YAML, Matter};
 use maud::{html, Markup, PreEscaped};
 use pulldown_cmark::Options;
-use serde::Deserialize;
 use std::path::{Path, PathBuf};
 
-use crate::{error::Error, Result};
+use crate::{error::Error, parsers::frontmatter::Frontmatter, Result};
 
 pub fn read_all_posts() -> Result<Vec<Post>> {
 	let posts = std::fs::read_dir("./posts")?;
@@ -24,7 +22,7 @@ pub fn read_all_posts() -> Result<Vec<Post>> {
 }
 
 pub struct Post {
-	pub frontmatter: PostFrontmatter,
+	pub frontmatter: Frontmatter,
 	pub filename: String,
 	pub href: String,
 	pub date: NaiveDate,
@@ -123,13 +121,6 @@ impl Ord for Post {
 	}
 }
 
-#[derive(Deserialize)]
-pub struct PostFrontmatter {
-	pub title: String,
-	pub description: String,
-	pub tags: Vec<String>,
-}
-
 pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 	let path_buf = PathBuf::from(path.as_ref());
 
@@ -160,19 +151,16 @@ pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 
 	let raw = std::fs::read_to_string(path)?;
 
-	let matter = Matter::<YAML>::new();
-
-	let front_matter = matter
-		.parse_with_struct::<PostFrontmatter>(&raw)
-		.ok_or_else(|| Error::InvalidPostFile {
-			path: path_buf,
-			reason: "failed to parse frontmatter".to_string(),
+	let (post_content, frontmatter) =
+		Frontmatter::parse(&raw).map_err(|error| Error::Parsing {
+			path: path_buf.clone(),
+			error: error.into(),
 		})?;
 
-	let html_output = parse_markdown(&front_matter.content);
+	let html_output = parse_markdown(&post_content);
 
 	Ok(Post {
-		frontmatter: front_matter.data,
+		frontmatter,
 		filename: filename_no_ext.to_string(),
 		href,
 		date,

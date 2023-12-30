@@ -1,7 +1,10 @@
 use std::path::PathBuf;
 
+use crate::parsers::error::ParsingError;
+
 #[derive(Debug)]
 pub enum Error {
+	Parsing { path: PathBuf, error: ParsingError },
 	FileNotFound(PathBuf),
 	InvalidPostFile { path: PathBuf, reason: String },
 	NoChildrenNoTemplate,
