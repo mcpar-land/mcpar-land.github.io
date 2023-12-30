@@ -1,5 +1,5 @@
 use crate::{error::Error, Result};
-use maud::{html, Markup, Render};
+use maud::{html, Markup};
 use std::path::PathBuf;
 
 pub type TemplateFn = fn(&PageBuilder) -> Result<Markup>;
@@ -116,10 +116,10 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 							}
 						}
 						footer #site-footer {
-							div {
-								("© John McParland ");
-								(chrono::offset::Utc::now().format("%Y"))
-							}
+							// div {
+							// 	("© John McParland 2024");
+							// 	(chrono::offset::Utc::now().format("%Y"))
+							// }
 							div {
 								a href="/site.zip" { "Download Site" }
 							}

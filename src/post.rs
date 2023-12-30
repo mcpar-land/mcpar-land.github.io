@@ -1,9 +1,12 @@
-use chrono::NaiveDate;
 use maud::{html, Markup, PreEscaped};
 use pulldown_cmark::Options;
 use std::path::{Path, PathBuf};
 
-use crate::{error::Error, parsers::frontmatter::Frontmatter, Result};
+use crate::{
+	error::Error,
+	parsers::{date::Date, frontmatter::Frontmatter},
+	Result,
+};
 
 pub fn read_all_posts() -> Result<Vec<Post>> {
 	let posts = std::fs::read_dir("./posts")?;
@@ -25,7 +28,7 @@ pub struct Post {
 	pub frontmatter: Frontmatter,
 	pub filename: String,
 	pub href: String,
-	pub date: NaiveDate,
+	pub date: Date,
 	pub content: Markup,
 }
 
@@ -37,7 +40,7 @@ impl Post {
 					a.post-list-title href=(self.href) { (self.frontmatter.title) }
 					.post-list-line {}
 					.post-list-date {
-						(self.date.format("%B %d, %Y"))
+						(self.date.pretty())
 					}
 				}
 				.post-list-description {
@@ -51,7 +54,7 @@ impl Post {
 		html! {
 			meta property="og:title" content=(&self.frontmatter.title);
 			meta property="og:description" content=(&self.frontmatter.description);
-			meta property="og:article:published_time" content=(self.date);
+			meta property="og:article:published_time" content=(self.date.iso_8601());
 		}
 	}
 
@@ -66,8 +69,8 @@ impl Post {
 					a href=(format!("/tag/{}.html", tag)) { (tag) }
 				}
 			}
-			time.post-date datetime=(self.date.format("%Y-%m-%d")) style=(format!("view-transition-name: post-date-{}",  self.filename)) {
-				(self.date.format("%B %d, %Y"))
+			time.post-date datetime=(self.date.iso_8601()) style=(format!("view-transition-name: post-date-{}",  self.filename)) {
+				(self.date.pretty())
 			}
 			hr;
 			article.markdown {
@@ -139,7 +142,11 @@ pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 				reason: format!("Invalid file format {}", filename_str),
 			})?;
 
-	let date = chrono::NaiveDate::parse_from_str(date, "%Y-%m-%d")?;
+	let date = Date::parse(date).map_err(|error| Error::Parsing {
+		path: path_buf.clone(),
+		error,
+	})?;
+
 	let filename_no_ext =
 		filename_str
 			.strip_suffix(".md")
@@ -154,7 +161,7 @@ pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 	let (post_content, frontmatter) =
 		Frontmatter::parse(&raw).map_err(|error| Error::Parsing {
 			path: path_buf.clone(),
-			error: error.into(),
+			error,
 		})?;
 
 	let html_output = parse_markdown(&post_content);

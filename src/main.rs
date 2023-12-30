@@ -1,15 +1,9 @@
-use std::{
-	fs::{DirEntry, File},
-	path::PathBuf,
-};
-
-use maud::{html, Markup, Render};
-use post::{parse_post_from_file, Post};
-
 use crate::{
 	blog::blog_list, page_builder::PageBuilder, post::read_all_posts,
 	rss::rss_feed, tags::gen_tag_pages, util::Siblings,
 };
+use maud::{html, Markup};
+use std::path::PathBuf;
 
 pub mod blog;
 pub mod error;
@@ -19,6 +13,7 @@ pub mod rss;
 pub mod tags;
 pub mod util;
 pub mod parsers {
+	pub mod date;
 	pub mod error;
 	pub mod frontmatter;
 }

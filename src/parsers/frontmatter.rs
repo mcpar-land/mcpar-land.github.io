@@ -1,3 +1,5 @@
+use super::error::ParsingError;
+
 pub struct Frontmatter {
 	pub title: String,
 	pub description: String,
@@ -7,31 +9,21 @@ pub struct Frontmatter {
 impl Frontmatter {
 	pub fn parse<'a>(
 		post: &'a str,
-	) -> Result<(&'a str, Frontmatter), FrontmatterParsingError> {
+	) -> Result<(&'a str, Frontmatter), ParsingError> {
 		let (frontmatter, post) = post
 			.strip_prefix("---")
-			.ok_or(FrontmatterParsingError::MissingDivider)?
+			.ok_or(ParsingError::CannotFindFrontmatter)?
 			.split_once("---")
-			.ok_or(FrontmatterParsingError::MissingSecondDivider)?;
+			.ok_or(ParsingError::CannotFindFrontmatter)?;
+
+		let err = || ParsingError::InvalidFrontmatter(frontmatter.to_string());
 
 		let mut lines = frontmatter.trim().lines();
 
-		let title = parse_line(
-			lines.next().ok_or(FrontmatterParsingError::MissingTitle)?,
-			"title",
-		)?
-		.to_string();
-		let description = parse_line(
-			lines
-				.next()
-				.ok_or(FrontmatterParsingError::MissingDescription)?,
-			"description",
-		)?
-		.to_string();
-		let tags = parse_tags(parse_line(
-			lines.next().ok_or(FrontmatterParsingError::MissingTags)?,
-			"tags",
-		)?)?;
+		let title = parse_line(lines.next().ok_or_else(err)?, "title")?.to_string();
+		let description =
+			parse_line(lines.next().ok_or_else(err)?, "description")?.to_string();
+		let tags = parse_tags(parse_line(lines.next().ok_or_else(err)?, "tags")?)?;
 
 		Ok((
 			post,
@@ -44,13 +36,14 @@ impl Frontmatter {
 	}
 }
 
-fn parse_tags(tags: &str) -> Result<Vec<String>, FrontmatterParsingError> {
+fn parse_tags(tags: &str) -> Result<Vec<String>, ParsingError> {
+	let err = || ParsingError::InvalidFrontmatter(tags.to_string());
 	Ok(
 		tags
 			.strip_prefix("[")
-			.ok_or(FrontmatterParsingError::BadTagsFormat)?
+			.ok_or_else(err)?
 			.strip_suffix("]")
-			.ok_or(FrontmatterParsingError::BadTagsFormat)?
+			.ok_or_else(err)?
 			.split(",")
 			.map(String::from)
 			.collect::<Vec<String>>(),
@@ -60,26 +53,18 @@ fn parse_tags(tags: &str) -> Result<Vec<String>, FrontmatterParsingError> {
 fn parse_line<'a>(
 	line: &'a str,
 	expected_key: &'static str,
-) -> Result<&'a str, FrontmatterParsingError> {
+) -> Result<&'a str, ParsingError> {
 	let (key, value) = line
 		.split_once(":")
-		.ok_or(FrontmatterParsingError::InvalidLineFormat)?;
+		.ok_or_else(|| ParsingError::InvalidFrontmatter(line.to_string()))?;
 
 	if key.trim() != expected_key {
-		return Err(FrontmatterParsingError::IncorrectLinePosition(expected_key));
+		return Err(ParsingError::InvalidFrontmatter(format!(
+			"{} should be {}",
+			key.trim(),
+			expected_key
+		)));
 	}
 
 	Ok(value.trim())
-}
-
-#[derive(Debug)]
-pub enum FrontmatterParsingError {
-	MissingDivider,
-	MissingSecondDivider,
-	InvalidLineFormat,
-	IncorrectLinePosition(&'static str),
-	MissingTitle,
-	MissingDescription,
-	MissingTags,
-	BadTagsFormat,
 }

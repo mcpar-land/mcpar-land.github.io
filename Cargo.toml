@@ -6,7 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = "0.4.26"
 highlight-pulldown = "0.2.2"
 maud = "0.25.0"
 pulldown-cmark = "0.9.3"
