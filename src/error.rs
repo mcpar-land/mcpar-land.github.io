@@ -10,7 +10,6 @@ pub enum Error {
 	NoChildrenNoTemplate,
 	Fs(std::io::Error),
 	Zip(zip::result::ZipError),
-	SyntaxLoading(syntect::LoadingError),
 }
 
 impl From<std::io::Error> for Error {
@@ -22,11 +21,5 @@ impl From<std::io::Error> for Error {
 impl From<zip::result::ZipError> for Error {
 	fn from(err: zip::result::ZipError) -> Self {
 		Self::Zip(err)
-	}
-}
-
-impl From<syntect::LoadingError> for Error {
-	fn from(err: syntect::LoadingError) -> Self {
-		Self::SyntaxLoading(err)
 	}
 }

@@ -1,13 +1,7 @@
-use crate::{
-	parsers::date::Date,
-	post::{read_all_posts, Post},
-	Result,
-};
+use crate::{parsers::date::Date, post::Post, Result};
 use maud::{html, Markup};
 
-pub fn blog_list() -> Result<Markup> {
-	let posts: Vec<Post> = read_all_posts()?;
-
+pub fn blog_list(posts: &Vec<Post>) -> Result<Markup> {
 	let mut items = Vec::<BlogListItem>::new();
 
 	let mut year: u16 = posts[0].date.year;
@@ -46,7 +40,7 @@ pub fn blog_list() -> Result<Markup> {
 	})
 }
 
-enum BlogListItem {
+enum BlogListItem<'a> {
 	Header { year: u16, month: u16 },
-	Post(Post),
+	Post(&'a Post),
 }

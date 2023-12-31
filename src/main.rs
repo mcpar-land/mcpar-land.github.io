@@ -3,6 +3,7 @@ use crate::{
 	rss::rss_feed, tags::gen_tag_pages, util::Siblings,
 };
 use maud::{html, Markup};
+use post::Post;
 use std::path::PathBuf;
 
 pub mod blog;
@@ -25,31 +26,35 @@ fn main() -> Result<()> {
 	// 	std::fs::remove_dir_all("./output")?;
 	// }
 
-	println!("📝 Loading syntax sets");
-	syntect::parsing::SyntaxSet::load_from_folder("./syntaxes")?;
-
 	std::fs::create_dir_all("./output/posts")?;
 
 	std::fs::copy("./robots.txt", "./output/robots.txt")?;
 
 	println!("🗃️  Generating webpages.");
 
+	let mut all_posts = read_all_posts()?;
+
 	let builder = PageBuilder::new()
 		.title("john mcparland")
 		.description("Hello!");
 
 	// Write all pages
-	builder.clone().body(homepage()?).write("index.html")?;
-	builder.clone().body(blog_list()?).write("blog.html")?;
 	builder
 		.clone()
-		.body(rss_feed()?)
+		.body(homepage(&all_posts)?)
+		.write("index.html")?;
+	builder
+		.clone()
+		.body(blog_list(&all_posts)?)
+		.write("blog.html")?;
+	builder
+		.clone()
+		.body(rss_feed(&all_posts)?)
 		.no_template()
 		.write("feed.xml")?;
-	gen_tag_pages(&builder)?;
+	gen_tag_pages(&builder, &all_posts)?;
 	builder.clone().body(page404()?).write("404.html")?;
 
-	let mut all_posts = read_all_posts()?;
 	all_posts.reverse();
 
 	// Write all posts
@@ -78,8 +83,7 @@ fn main() -> Result<()> {
 	Ok(())
 }
 
-fn homepage() -> Result<Markup> {
-	let all_posts = read_all_posts()?;
+fn homepage(all_posts: &Vec<Post>) -> Result<Markup> {
 	Ok(html! {
 		p {
 			"Hello! I'm a developer located in Boston, and this is my website. "

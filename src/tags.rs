@@ -2,14 +2,9 @@ use std::collections::HashMap;
 
 use maud::{html, Markup};
 
-use crate::{
-	page_builder::PageBuilder,
-	post::{read_all_posts, Post},
-	Result,
-};
+use crate::{page_builder::PageBuilder, post::Post, Result};
 
-pub fn gen_tag_pages(builder: &PageBuilder) -> Result<()> {
-	let posts = read_all_posts()?;
+pub fn gen_tag_pages(builder: &PageBuilder, posts: &Vec<Post>) -> Result<()> {
 	std::fs::create_dir_all("./output/tag")?;
 
 	let mut tags: HashMap<&str, Vec<&Post>> = HashMap::new();

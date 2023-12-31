@@ -1,3 +1,4 @@
+use highlight_pulldown::PulldownHighlighter;
 use maud::{html, Markup, PreEscaped};
 use pulldown_cmark::Options;
 use std::path::{Path, PathBuf};
@@ -13,8 +14,10 @@ pub fn read_all_posts() -> Result<Vec<Post>> {
 
 	let mut parsed_posts: Vec<Post> = Vec::new();
 
+	let hl = PulldownHighlighter::new("InspiredGitHub").unwrap();
+
 	for post in posts {
-		let post = parse_post_from_file(post?.path())?;
+		let post = parse_post_from_file(post?.path(), &hl)?;
 		parsed_posts.push(post);
 	}
 
@@ -60,8 +63,8 @@ impl Post {
 
 	pub fn render(&self, prev: Option<&Post>, next: Option<&Post>) -> Markup {
 		html! {
-			h1.post-title style=(format!("view-transition-name: post-title-{}",  self.filename)) { (self.frontmatter.title) }
-			.post-description style=(format!("view-transition-name: post-desc-{}",  self.filename))  {
+			h1.post-title { (self.frontmatter.title) }
+			.post-description {
 				(self.frontmatter.description)
 			}
 			.post-tags {
@@ -69,7 +72,7 @@ impl Post {
 					a href=(format!("/tag/{}.html", tag)) { (tag) }
 				}
 			}
-			time.post-date datetime=(self.date.iso_8601()) style=(format!("view-transition-name: post-date-{}",  self.filename)) {
+			time.post-date datetime=(self.date.iso_8601()) {
 				(self.date.pretty())
 			}
 			hr;
@@ -124,7 +127,10 @@ impl Ord for Post {
 	}
 }
 
-pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
+pub fn parse_post_from_file<P: AsRef<Path>>(
+	path: P,
+	hl: &PulldownHighlighter,
+) -> Result<Post> {
 	let path_buf = PathBuf::from(path.as_ref());
 
 	let filename_str = path
@@ -164,7 +170,7 @@ pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 			error,
 		})?;
 
-	let html_output = parse_markdown(&post_content);
+	let html_output = parse_markdown(&post_content, hl);
 
 	Ok(Post {
 		frontmatter,
@@ -175,11 +181,10 @@ pub fn parse_post_from_file<P: AsRef<Path>>(path: P) -> Result<Post> {
 	})
 }
 
-fn parse_markdown(input: &str) -> String {
+fn parse_markdown(input: &str, hl: &PulldownHighlighter) -> String {
 	let parser = pulldown_cmark::Parser::new_ext(&input, markdown_options());
 	let parser = parse_markdown_custom(parser.into_iter());
-	let parser =
-		highlight_pulldown::highlight_with_theme(parser, "InspiredGitHub").unwrap();
+	let parser = hl.highlight(parser).unwrap();
 	let mut html_output = String::new();
 	pulldown_cmark::html::push_html(&mut html_output, parser.into_iter());
 

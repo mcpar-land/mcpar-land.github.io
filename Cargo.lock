@@ -197,7 +197,6 @@ dependencies = [
  "highlight-pulldown",
  "maud",
  "pulldown-cmark",
- "syntect",
  "zip",
  "zip-extensions",
 ]

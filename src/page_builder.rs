@@ -97,7 +97,7 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 					header #site-header {
 						a #site-title href="/" {
 							#site-title-text { "john mcparland" }
-							// img src="/static/starheart.gif";
+							img src="/static/starheart.gif";
 						}
 
 						nav #site-links {

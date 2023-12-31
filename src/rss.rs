@@ -1,27 +1,8 @@
-use crate::post::{read_all_posts, Post};
+use crate::post::Post;
 use crate::Result;
 use maud::{html, Markup};
 
-pub fn rss_feed() -> Result<Markup> {
-	// let channel = ChannelBuilder::default()
-	// 	.title("mcpar.land".to_string())
-	// 	.link("https://mcpar.land".to_string())
-	// 	.description("Feed for posts from mcpar.land".to_string())
-	// 	.items(
-	// 		read_all_posts()?
-	// 			.into_iter()
-	// 			.take(MAX_RSS_FEED_SIZE)
-	// 			.map(|post| post.as_rss_item())
-	// 			.collect::<Vec<rss::Item>>(),
-	// 	)
-	// 	.build();
-
-	// channel.validate()?;g
-
-	// Ok(html! { (PreEscaped(channel.to_string())) })
-
-	let all_posts = read_all_posts()?;
-
+pub fn rss_feed(all_posts: &Vec<Post>) -> Result<Markup> {
 	let most_recent_date = all_posts.iter().map(|post| &post.date).max();
 
 	Ok(html! {
@@ -33,7 +14,7 @@ pub fn rss_feed() -> Result<Markup> {
 				@if let Some(most_recent_date) = most_recent_date {
 					pubDate { (most_recent_date.rfc2822()) }
 				}
-				@for post in &all_posts {
+				@for post in all_posts {
 					(post.rss_markup())
 				}
 			}
