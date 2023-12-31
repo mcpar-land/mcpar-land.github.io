@@ -1,7 +1,5 @@
 :root {
   --disabled: #b1b1b1;
-  --page-width: 600px;
-  --page-pad: 100px;
 }
 
 ::selection {
@@ -13,33 +11,22 @@
   box-sizing: border-box;
 }
 
-html {
-  /* hack to fix scrollbar nudging site over */
-  margin-left: calc(100vw - 100%);
-}
-
 body {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   background: #fffff8;
   margin: 0;
-  padding: 5px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-#site-wrapper-right {
-  /* background: red; */
+  padding: 0;
   width: 100%;
-  height: fit-content;
-  max-width: calc(var(--page-width) + var(--page-pad) * 2);
+  max-width: calc(600px + (100px * 2));
   display: flex;
   justify-content: center;
 }
 
-#site-wrapper-left {
+#site-wrapper {
   width: 100%;
-  height: fit-content;
-  max-width: var(--page-width);
+  max-width: 600px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 #site-header {
@@ -173,7 +160,6 @@ body {
   padding-bottom: 100px;
   color: var(--disabled);
   text-align: center;
-  view-transition-name: site-footer;
 }
 
 #site-footer a {
@@ -229,11 +215,11 @@ body {
 }
 
 .markdown .footnote-reference::before {
-  content: '[';
+  content: "[";
 }
 
 .markdown .footnote-reference::after {
-  content: ']';
+  content: "]";
 }
 
 .markdown .footnote-definition {
@@ -241,11 +227,11 @@ body {
 }
 
 .markdown .footnote-definition-label::before {
-  content: '[';
+  content: "[";
 }
 
 .markdown .footnote-definition-label::after {
-  content: ']';
+  content: "]";
 }
 
 .markdown .footnote-definition p {
@@ -284,7 +270,7 @@ hr {
 }
 
 /* ==== DARK MODE =========================================================== */
-
+/* 
 @media (prefers-color-scheme: dark) {
   body {
     background: #1a1a1a;
@@ -304,6 +290,6 @@ hr {
   }
 
   pre {
-    filter: invert(1); /** check this shit out */
+    filter: invert(1); 
   }
-}
+} */

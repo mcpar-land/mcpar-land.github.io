@@ -76,7 +76,6 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 		html {
 			(maud::DOCTYPE)
 			head {
-				meta name="view-transition" content="same-origin";
 				meta name="viewport" content="width=device-width, initial-scale=1.0";
 				style {
 					(css)
@@ -94,35 +93,33 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 				}
 			}
 			body {
-				#site-wrapper-right {
-					#site-wrapper-left {
-						header #site-header {
-							a #site-title href="/" {
-								#site-title-text { "john mcparland" }
-								// img src="/static/starheart.gif";
-							}
+				#site-wrapper {
+					header #site-header {
+						a #site-title href="/" {
+							#site-title-text { "john mcparland" }
+							// img src="/static/starheart.gif";
+						}
 
-							nav #site-links {
-								// a href="/about" { "about" }
-								a href="/blog.html" { "blog" }
-								a href="/feed.xml" { "rss" }
-								a href="https://twitter.com/mcpar_land" target="_blank" { "twitter" }
-								a href="https://github.com/mcpar-land" target="_blank" { "github" }
-							}
+						nav #site-links {
+							// a href="/about" { "about" }
+							a href="/blog.html" { "blog" }
+							a href="/feed.xml" { "rss" }
+							a href="https://twitter.com/mcpar_land" target="_blank" { "twitter" }
+							a href="https://github.com/mcpar-land" target="_blank" { "github" }
 						}
-						#children {
-							@if let Some(children) = &builder.body {
-								(children)
-							}
+					}
+					#children {
+						@if let Some(children) = &builder.body {
+							(children)
 						}
-						footer #site-footer {
-							// div {
-							// 	("© John McParland 2024");
-							// 	(chrono::offset::Utc::now().format("%Y"))
-							// }
-							div {
-								a href="/site.zip" { "Download Site" }
-							}
+					}
+					footer #site-footer {
+						// div {
+						// 	("© John McParland 2024");
+						// 	(chrono::offset::Utc::now().format("%Y"))
+						// }
+						div {
+							a href="/site.zip" { "Download Site" }
 						}
 					}
 				}
