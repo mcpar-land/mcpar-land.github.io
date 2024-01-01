@@ -187,6 +187,10 @@ body {
 
 /* ==== MARKDOWN ============================================================ */
 
+.markdown pre {
+  background: #fffff8 !important;
+}
+
 .markdown p {
   text-align: justify;
 }
