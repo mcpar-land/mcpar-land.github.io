@@ -1,6 +1,6 @@
 use crate::post::Post;
 use crate::Result;
-use maud::{html, Markup};
+use maud::{html, Markup, PreEscaped};
 
 pub fn rss_feed(all_posts: &Vec<Post>) -> Result<Markup> {
 	let most_recent_date = all_posts.iter().map(|post| &post.date).max();
@@ -11,6 +11,7 @@ pub fn rss_feed(all_posts: &Vec<Post>) -> Result<Markup> {
 				title { "mcpar.land" }
 				link { "https://mcpar.land" }
 				description { "Post feed for mcpar.land" }
+				generator { "https://github.com/mcpar-land/mcpar-land.github.io" }
 				@if let Some(most_recent_date) = most_recent_date {
 					pubDate { (most_recent_date.rfc2822()) }
 				}
@@ -28,7 +29,11 @@ impl Post {
 			item {
 				title { (&self.frontmatter.title) }
 				link { (format!("https://mcpar.land{}", self.href)) }
-				description { (&self.frontmatter.description) }
+				description {
+					(PreEscaped("<![CDATA["))
+					(&self.content)
+					(PreEscaped("]]>"))
+				}
 				@for tag in &self.frontmatter.tags {
 					category { (tag) }
 				}
