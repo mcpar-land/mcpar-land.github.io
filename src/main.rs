@@ -14,6 +14,7 @@ pub mod rss;
 pub mod tags;
 pub mod util;
 pub mod parsers {
+	pub mod combinators;
 	pub mod date;
 	pub mod error;
 	pub mod frontmatter;

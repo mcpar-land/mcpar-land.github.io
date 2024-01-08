@@ -1,0 +1,1 @@
+cargo watch -x run -w src -w static -w posts -w styles.css

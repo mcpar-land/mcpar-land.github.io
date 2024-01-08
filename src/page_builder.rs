@@ -1,5 +1,5 @@
 use crate::{error::Error, Result};
-use maud::{html, Markup};
+use maud::{html, Markup, PreEscaped};
 use std::path::PathBuf;
 
 pub type TemplateFn = fn(&PageBuilder) -> Result<Markup>;
@@ -78,7 +78,7 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 			head {
 				meta name="viewport" content="width=device-width, initial-scale=1.0";
 				style {
-					(css)
+					(PreEscaped(css))
 				}
 				link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml";
 				@if let Some(title) = &builder.title {
