@@ -1,7 +1,7 @@
 :root {
   --disabled: #b1b1b1;
-  --bg: #fafaf1;
-  --bg-code: #f3f3ec;
+  --bg: #faf1f1;
+  --bg-code: #ffeaea;
   --text: #111010;
   --text-light: #3a3a3a;
 }
@@ -223,7 +223,7 @@ body {
   }
 
   pre {
-    background: #fffff8 !important;
+    background: var(--bg-code) !important;
   }
 
   p {
