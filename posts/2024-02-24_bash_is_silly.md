@@ -36,7 +36,7 @@ The culprit was: `&dl=0`. Or more specifically, `&`! The actual command that was
 wget -O my_cool_zip https://www.dropbox.com/scl/fi/m4f4wpg4eiouunnpqjpjd/some_giant_zip_on_dropbox.zip?rlkey=2j34hg234867fd8a & dl=0
 ```
 
-The & gets interpreted as "run these two commands concurrently", so we download a truncated version of the original url, and assign `"0"` to the variable `dl`. Wrapping it in quotes fixes it.
+The & gets interpreted as "run these two commands concurrently", so we download a truncated version of the original url, and assign `"0"` to the variable `dl`. Wrapping it in quotes fixes it. And because the URL is no longer mangled, whatever it was causing a corrupted download doesn't happen, either!
 
 And because I'd grown to like the background wget pattern, This restores that behavior, too:
 
