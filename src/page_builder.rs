@@ -121,6 +121,11 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 						div {
 							a href="/site.zip" { "Download Site" }
 						}
+						div {
+							a href="https://github.com/mcpar-land/mcpar-land.github.io" {
+								"Repo"
+							}
+						}
 					}
 				}
 			}
