@@ -1,6 +1,6 @@
 ---
 title: Bash is Silly
-description: It's just silly
+description: Quote your URLs, kids!
 tags: [linux]
 ---
 
