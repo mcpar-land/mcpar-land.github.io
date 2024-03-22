@@ -18,7 +18,7 @@ Redirecting output to 'wget-log'
 
 Now hang on, I didn't ask for that, but whatever. The download finishes, you try to unzip it, and you get met with some kind of file corruption error! What's going on!
 
-i spent weeks just not really even thinking this was something I could fix. Wget is just weird and dropbox files sometimes just download krangled. Oh well, I can deal with these two unrelated things.
+I spent weeks just not really even thinking this was something I could fix. Wget is just weird and dropbox files sometimes just download krangled. Oh well, I can deal with these two unrelated things.
 
 I "fixed" these two problems at the same time, on accident.
 
