@@ -104,7 +104,7 @@ pub fn base_template(builder: &PageBuilder) -> Result<Markup> {
 							// a href="/about" { "about" }
 							a href="/blog.html" { "blog" }
 							a href="/feed.xml" { "rss" }
-							a href="https://twitter.com/mcpar_land" target="_blank" { "twitter" }
+							a href="https://bsky.app/profile/mcpar.land" target="_blank" { "bsky" }
 							a href="https://github.com/mcpar-land" target="_blank" { "github" }
 						}
 					}
